@@ -1,0 +1,103 @@
+import { Website_Field, Website_Type } from '@prisma/client'
+import { ReactNode } from 'react'
+export const BODY_TEXT_CHUNKS_SIZE = 1000
+
+export const BOOKMARK_SIZE = 30
+
+export const MAX_BOOKMARK_SIZE = 200
+
+/**
+ * ECOMMERCE, BUSINESS, BLOG, PORTFOLIO, EVENT, PERSONAL, MEMBERSHIP, NONPROFIT, INFORMATIONAL, ONLINE_FORUM, COMMUNITY, STARTUP, CONSULTING, BOOKING, PETITION, SCHOOL, HOBBY, INTERACTIVE, ENTERTAINMENT, WEDDING, TRAVEL, DIRECTORY, LANDING_PAGE, NEWS_MAGAZINE, MEMORIAL, SUBSCRIPTION, KIDS, WEBSITE
+ */
+export const BookmarkWebsiteTypeIcons: Record<
+  Website_Type,
+  ReactNode | string
+> = {
+  ECOMMERCE: '🛒',
+  BUSINESS: '🏢',
+  BLOG: '📝',
+  PORTFOLIO: '📁',
+  EVENT: '🎉',
+  PERSONAL: '👤',
+  MEMBERSHIP: '👥',
+  NONPROFIT: '🌐',
+  INFORMATIONAL: 'ℹ️',
+  ONLINE_FORUM: '💬',
+  COMMUNITY: '👨‍👩‍👧‍👦',
+  STARTUP: '🚀',
+  CONSULTING: '📊',
+  BOOKING: '📅',
+  PETITION: '📜',
+  SCHOOL: '🎓',
+  HOBBY: '🎨',
+  INTERACTIVE: '🎮',
+  ENTERTAINMENT: '🎭',
+  WEDDING: '💒',
+  TRAVEL: '✈️',
+  DIRECTORY: '📂',
+  LANDING_PAGE: '🛬',
+  NEWS_MAGAZINE: '📰',
+  MEMORIAL: '🕯️',
+  SUBSCRIPTION: '💳',
+  KIDS: '👶',
+  WEBSITE: '🌐',
+}
+
+/**
+ * TECHNOLOGY, SPORTS, FASHION, HEALTH, EDUCATION, ENTERTAINMENT, NEWS, BUSINESS, FINANCE, TRAVEL, FOOD, LIFESTYLE, SCIENCE, ART, HISTORY, BOOKS, MOVIES, MUSIC, GAMING, PHOTOGRAPHY, DIY, CARS, GARDENING, PETS, RELIGION, PARENTING, POLITICS, ENVIRONMENT, REAL_ESTATE, CAREER, FITNESS, BEAUTY, ANIME, COMICS, HOBBIES, WEDDINGS, MILITARY, GOVERNMENT, ARCHITECTURE, ENGINEERING, SOCIAL_MEDIA, MARKETING, ADVERTISING, MEDICINE, LAW, CULTURE, PHILOSOPHY, PSYCHOLOGY, LANGUAGES, NONE
+ */
+export const BookmarkWebsiteFieldIcons: Record<Website_Field, ReactNode> = {
+  TECHNOLOGY: '💻',
+  SPORTS: '⚽',
+  FASHION: '👗',
+  HEALTH: '🏥',
+  EDUCATION: '🎓',
+  ENTERTAINMENT: '🎭',
+  NEWS: '📰',
+  BUSINESS: '🏢',
+  FINANCE: '💰',
+  TRAVEL: '✈️',
+  FOOD: '🍔',
+  LIFESTYLE: '🏖️',
+  SCIENCE: '🔬',
+  ART: '🎨',
+  HISTORY: '🏛️',
+  BOOKS: '📚',
+  MOVIES: '🎥',
+  MUSIC: '🎵',
+  GAMING: '🎮',
+  PHOTOGRAPHY: '📸',
+  DIY: '🛠️',
+  CARS: '🚗',
+  GARDENING: '🌻',
+  PETS: '🐶',
+  RELIGION: '⛪',
+  PARENTING: '👶',
+  POLITICS: '🏛️',
+  ENVIRONMENT: '🌳',
+  REAL_ESTATE: '🏠',
+  CAREER: '👔',
+  FITNESS: '🏋️',
+  BEAUTY: '💄',
+  ANIME: '👾',
+  COMICS: '🦸',
+  HOBBIES: '🎨',
+  WEDDINGS: '💒',
+  MILITARY: '🎖️',
+  GOVERNMENT: '🏛️',
+  ARCHITECTURE: '🏛️',
+  ENGINEERING: '🔧',
+  SOCIAL_MEDIA: '📱',
+  MARKETING: '📈',
+  ADVERTISING: '📢',
+  MEDICINE: '🏥',
+  LAW: '⚖️',
+  CULTURE: '🎭',
+  PHILOSOPHY: '📜',
+  PSYCHOLOGY: '🧠',
+  LANGUAGES: '🗣️',
+  NONE: '❓',
+  KIDS: '👶',
+  INTERIOR_DESIGN: '🪑',
+  DESIGN: '🎨',
+}
