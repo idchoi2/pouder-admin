@@ -36,3 +36,10 @@ export interface AxiosErrorInterface extends AxiosError {
 }
 
 export type BookmarkViewType = 'BREIF' | 'DETAIL' | 'GRID'
+
+export interface PaginationInterface {
+  page: number
+  size: number
+  total: number
+  totalPages: number
+}

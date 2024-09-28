@@ -16,7 +16,7 @@ export async function GET() {
   const account = await checkAccount(me)
 
   if (!account) {
-    return showErrorJsonResponse('notFound')
+    return showErrorJsonResponse('unauthorized')
   }
 
   // Get account object

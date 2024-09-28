@@ -1,4 +1,5 @@
 import LayoutAdmin from '@/components/Layouts/LayoutAdmin'
+import Typography from '@/components/ui/typography'
 import { createClient } from '@/utils/supabase/server'
 
 export default async function HomePage() {
@@ -8,5 +9,9 @@ export default async function HomePage() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  return <LayoutAdmin>yoyo</LayoutAdmin>
+  return (
+    <LayoutAdmin>
+      <Typography variant="h1">Hello, {user?.email}</Typography>
+    </LayoutAdmin>
+  )
 }

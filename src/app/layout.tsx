@@ -1,20 +1,14 @@
 import { AuthWrapper } from '@/components/AuthWrapper'
 import { DashboardWrapper } from '@/components/DashboardWrapper'
-import { LocaleDetectorWrapper } from '@/components/LocaleDetectorWrapper'
 import { ReactQueryClientProvider } from '@/components/ReactQueryClientProvider'
 import RecoilRootWrapper from '@/components/RecoilWrapper'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { Toaster } from '@/components/ui/toaster'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/utils/supabase/server'
+import { AntdRegistry } from '@ant-design/nextjs-registry'
 import type { Metadata } from 'next'
-import { Red_Hat_Display } from 'next/font/google'
 import './globals.css'
-
-const fontSans = Red_Hat_Display({
-  subsets: ['latin'],
-  variable: '--font-sans',
-})
 
 export const metadata: Metadata = {
   title: 'Pouder Admin',
@@ -34,11 +28,7 @@ export default async function RootLayout({
 
   return (
     <html lang={'ko'} className="scroll-smooth">
-      <body
-        className={cn(
-          'min-h-screen bg-background font-sans antialiased',
-          fontSans.variable
-        )}>
+      <body className={cn('min-h-screen bg-background font-sans antialiased')}>
         <ReactQueryClientProvider>
           <RecoilRootWrapper>
             <AuthWrapper user={user}>
@@ -48,7 +38,7 @@ export default async function RootLayout({
                 enableSystem
                 disableTransitionOnChange>
                 <DashboardWrapper>
-                  <LocaleDetectorWrapper>{children}</LocaleDetectorWrapper>
+                  <AntdRegistry>{children}</AntdRegistry>
                 </DashboardWrapper>
                 <Toaster />
               </ThemeProvider>

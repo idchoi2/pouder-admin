@@ -8,7 +8,7 @@ export default async function LayoutAdmin({
   return (
     <main className="w-full h-screen flex space-x-10">
       <Sidebar />
-      <div className="w-full grow">{children}</div>
+      <div className="w-full container mx-auto grow py-14">{children}</div>
     </main>
   )
 }

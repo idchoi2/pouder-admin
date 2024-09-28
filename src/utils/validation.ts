@@ -68,10 +68,42 @@ export const checkAccount = async (user: User) => {
     where: {
       user_id: user.id,
       deleted_at: null,
+      is_admin: true,
     },
   })
 
   return account
+}
+
+/**
+ * Check if the user has an account
+ * @param user
+ * @returns
+ */
+export const checkUser = async (userId: number) => {
+  const account = await prisma.accounts.findFirst({
+    where: {
+      id: userId,
+      deleted_at: null,
+    },
+    include: {
+      users: true,
+    },
+  })
+
+  if (!account) return null
+
+  const betaUsers = await prisma.beta_users.findFirst({
+    where: {
+      email: account?.users?.email,
+      deleted_at: null,
+    },
+  })
+
+  return {
+    ...account,
+    beta: betaUsers,
+  }
 }
 
 /**
