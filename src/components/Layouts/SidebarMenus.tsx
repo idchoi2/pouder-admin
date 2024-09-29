@@ -13,6 +13,7 @@ function SidebarMenus() {
       <li>
         <Button
           variant={pathname == '/' ? 'default' : 'ghost'}
+          size={'sm'}
           asChild
           className="w-full block justify-start">
           <Link href="/" className="flex  items-center space-x-2">
@@ -24,6 +25,7 @@ function SidebarMenus() {
       <li>
         <Button
           variant={pathname.startsWith('/bookmarks') ? 'default' : 'ghost'}
+          size={'sm'}
           asChild
           className="w-full block justify-start">
           <Link href="/bookmarks" className="flex  items-center space-x-2">
@@ -35,6 +37,7 @@ function SidebarMenus() {
       {/* <li>
         <Button
           variant={'ghost'}
+          size={'sm'}
           asChild
           className="w-full block justify-start">
           <Link href="/teams" className="flex  items-center space-x-2">
@@ -46,6 +49,7 @@ function SidebarMenus() {
       <li>
         <Button
           variant={pathname.startsWith('/users') ? 'default' : 'ghost'}
+          size={'sm'}
           asChild
           className="w-full block justify-start">
           <Link href="/users" className="flex  items-center space-x-2">
@@ -59,6 +63,7 @@ function SidebarMenus() {
           variant={
             pathname.startsWith('/searchHistories') ? 'default' : 'ghost'
           }
+          size={'sm'}
           asChild
           className="w-full block justify-start">
           <Link

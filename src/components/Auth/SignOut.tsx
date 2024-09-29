@@ -7,7 +7,7 @@ export default function SignOut() {
   const supabase = createClient()
 
   return (
-    <div>
+    <div title="Logout">
       <Button
         variant={'ghost'}
         size={'icon'}
