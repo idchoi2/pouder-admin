@@ -29,6 +29,11 @@ export async function GET(request: NextRequest) {
     },
     include: {
       users: true,
+      team_account_roles: {
+        include: {
+          teams: true,
+        },
+      },
     },
     orderBy: [
       {

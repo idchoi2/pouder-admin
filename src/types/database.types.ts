@@ -6,6 +6,7 @@ import {
   bookmarks,
   chat_bookmarks,
   chats,
+  team_account_roles,
   teams,
   users,
 } from '@prisma/client'
@@ -21,8 +22,13 @@ export interface AccountInterface {
   teams?: teams[]
 }
 
+export interface TeamAccountRoles extends team_account_roles {
+  teams?: teams
+}
+
 export interface UserInterface extends accounts {
   teams?: teams[]
+  team_account_roles?: TeamAccountRoles[]
   users: users
 }
 

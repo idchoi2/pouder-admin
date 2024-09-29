@@ -16,6 +16,7 @@ import moment from 'moment'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
+import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { useToast } from '../ui/use-toast'
 
@@ -78,6 +79,26 @@ function UsersList() {
         </div>
       ),
       width: 144,
+    },
+    {
+      title: 'Teams',
+      key: 'teams',
+      render: (user: UserInterface) => (
+        <div>
+          <ul className="space-y-1">
+            {user.team_account_roles?.map((team_account_role, tIdx) => (
+              <li key={team_account_role.id}>
+                <Badge
+                  variant={'outline'}
+                  className="text-xs truncate whitespace-normal break-words">
+                  {team_account_role.teams?.name}
+                </Badge>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ),
+      width: 120,
     },
     {
       title: '가입날짜',
