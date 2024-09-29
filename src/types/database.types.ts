@@ -1,12 +1,13 @@
 import { LanguageType } from '@/types/global.types'
 import {
-  Bookmark_Chunk_Type,
+  beta_users,
   bookmark_chunks,
   bookmark_fields,
   bookmarks,
+  chat_bookmarks,
   chats,
-  folders,
   teams,
+  users,
 } from '@prisma/client'
 import { User } from '@supabase/supabase-js'
 
@@ -20,35 +21,29 @@ export interface AccountInterface {
   teams?: teams[]
 }
 
+export interface UserInterface {
+  id: string
+  email: string
+  name: string
+  bio: string | null
+  avatar: string | null
+  preferred_language: LanguageType | null
+  teams?: teams[]
+  users: users
+  is_admin?: boolean
+  beta: beta_users | null
+  created_at: string
+}
+
 export interface BookmarksInterface extends bookmarks {
-  users?: User
+  teams?: teams
+  accounts?: AccountInterface
   bookmark_fields?: bookmark_fields
   chunks?: bookmark_chunks[]
-  isNew?: boolean
 }
 
-export interface BookmarksPaginationInterface {
-  list: BookmarksInterface[]
-  hasMore: boolean
-  init: boolean
-}
-
-export interface MatchBookmarkChunksInterface {
-  id: number
-  team_id: string
-  bookmark_id: string
-  content?: string
-  similarity?: number
-}
-
-export interface BookmarkChunksContentsInterface {
-  type: Bookmark_Chunk_Type
-  content: string
-}
-
-export interface FoldersInterface extends folders {
-  users?: User
-  bookmarks?: bookmarks[]
+export interface ChatBookmarksInterface extends chat_bookmarks {
+  bookmarks?: BookmarksInterface
 }
 
 export interface ChatsInterface extends chats {
@@ -56,12 +51,5 @@ export interface ChatsInterface extends chats {
   accounts: AccountInterface
   bookmarks?: BookmarksInterface
   dateLabel: string
-  chat_bookmarks?: {
-    bookmarks?: BookmarksInterface
-  }[]
-}
-
-export interface ChatsPaginationInterface {
-  list: ChatsInterface[]
-  hasMore: boolean
+  chat_bookmarks?: ChatBookmarksInterface[]
 }

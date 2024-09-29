@@ -1,37 +1,12 @@
 import { axiosInstance } from '@/configs/axios.config'
-import { SearchRequest } from '@/types/request.types'
+import { BookmarksListSearchParamsInterface } from '@/types/bookmarks.types'
 
 /**
- * 채팅 내역 조회
- * @param teamId
+ * 북마크 목록 조회
  * @returns
  */
-export const getChatsOfTeam = (teamId: string, lastId: string | null) => {
+export const getChats = (params: BookmarksListSearchParamsInterface | null) => {
   return axiosInstance
-    .get(`/api/teams/${teamId}/chats?lastId=${lastId ? lastId : ''}`)
-    .then((res) => res.data)
-}
-
-/*
- * 검색 채팅 추가
- * @param teamId
- * @param req
- * @returns
- */
-export const searchBookmarkForTeam = (teamId: string, req: SearchRequest) => {
-  return axiosInstance
-    .post(`/api/teams/${teamId}/chats`, req)
-    .then((res) => res.data)
-}
-
-/**
- * 채팅 삭제
- * @param teamId
- * @param chatId
- * @returns
- */
-export const deleteChat = (teamId: string, chatId: string) => {
-  return axiosInstance
-    .delete(`/api/teams/${teamId}/chats/${chatId}`)
+    .get(`/api/chats?page=${params?.page}&sort=${params?.sort}&q=${params?.q}`)
     .then((res) => res.data)
 }

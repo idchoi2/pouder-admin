@@ -1,6 +1,6 @@
 'use client'
 
-import { Bookmark, Home, Search, User, Users } from 'lucide-react'
+import { Bookmark, Home, Search, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '../ui/button'
@@ -15,7 +15,7 @@ function SidebarMenus() {
           variant={pathname == '/' ? 'default' : 'ghost'}
           asChild
           className="w-full block justify-start">
-          <Link href="/" className="flex  items-center space-x-1">
+          <Link href="/" className="flex  items-center space-x-2">
             <Home size={16} />
             <span>Home</span>
           </Link>
@@ -23,32 +23,32 @@ function SidebarMenus() {
       </li>
       <li>
         <Button
-          variant={'ghost'}
+          variant={pathname.startsWith('/bookmarks') ? 'default' : 'ghost'}
           asChild
           className="w-full block justify-start">
-          <Link href="/bookmarks" className="flex  items-center space-x-1">
+          <Link href="/bookmarks" className="flex  items-center space-x-2">
             <Bookmark size={16} />
             <span>Bookmarks</span>
           </Link>
         </Button>
       </li>
-      <li>
+      {/* <li>
         <Button
           variant={'ghost'}
           asChild
           className="w-full block justify-start">
-          <Link href="/teams" className="flex  items-center space-x-1">
+          <Link href="/teams" className="flex  items-center space-x-2">
             <Users size={16} />
             <span>Teams</span>
           </Link>
         </Button>
-      </li>
+      </li> */}
       <li>
         <Button
           variant={pathname.startsWith('/users') ? 'default' : 'ghost'}
           asChild
           className="w-full block justify-start">
-          <Link href="/users" className="flex  items-center space-x-1">
+          <Link href="/users" className="flex  items-center space-x-2">
             <User size={16} />
             <span>Users</span>
           </Link>
@@ -61,7 +61,9 @@ function SidebarMenus() {
           }
           asChild
           className="w-full block justify-start">
-          <Link href="/search" className="flex  items-center space-x-1">
+          <Link
+            href="/searchHistories"
+            className="flex  items-center space-x-2">
             <Search size={16} />
             <span>Search Histories</span>
           </Link>

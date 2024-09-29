@@ -21,3 +21,14 @@ export const toggleBetaUser = (userId: string) => {
     .put(`/api/users/beta/toggle/${userId}`)
     .then((res) => res.data)
 }
+
+/**
+ * 베타 유저 승인 이메일 발송
+ * @param userId
+ * @returns
+ */
+export const sendApprovalEmail = (userId: string) => {
+  return axiosInstance
+    .post(`/api/users/beta/email/${userId}`)
+    .then((res) => res.data)
+}

@@ -26,9 +26,3 @@ export interface FolderCreateRequest {
 export interface SearchRequest {
   prompt: string
 }
-
-export interface BookmarkListParamsInterface {
-  teamId: string
-  bookmarkField: string
-  tag: string
-}

@@ -1,1 +1,1 @@
-export const CHAT_SIZE = 30
+export const CHAT_LIST_SIZE = 10

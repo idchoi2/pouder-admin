@@ -10,7 +10,7 @@ function Sidebar() {
   const [me, setMe] = useRecoilState(meAtom)
 
   return (
-    <div className="w-[280px] flex-none h-screen bg-background flex flex-col justify-between p-4 border-r">
+    <div className="sticky top-0 left-0 w-56 flex-none h-screen bg-background flex flex-col justify-between p-4 border-r">
       <div className="space-y-4">
         <div className="font-extrabold">Pouder</div>
         <SidebarMenus />

@@ -1,4 +1,5 @@
-import { getUsers, toggleBetaUser } from '@/api/users.api'
+import { getUsers, sendApprovalEmail, toggleBetaUser } from '@/api/users.api'
+import { useToast } from '@/components/ui/use-toast'
 import {
   UsersListSearchInterface,
   UsersListSearchParamsInterface,
@@ -47,6 +48,44 @@ export const useToggleBetaUser = (
               }
             : user
         ),
+      })
+    },
+  })
+}
+
+export const useSendBetaApprovalEmail = (
+  params: UsersListSearchParamsInterface | null
+) => {
+  const queryClient = useQueryClient()
+  const { toast } = useToast()
+
+  return useMutation({
+    mutationKey: [USER_KEY, params],
+    mutationFn: (userId: string) => sendApprovalEmail(userId),
+    onSuccess: (userId: string) => {
+      const oldUsersList = queryClient.getQueryData<UsersListSearchInterface>([
+        USER_KEY,
+        params,
+      ])
+
+      queryClient.setQueryData([USER_KEY, params], {
+        ...oldUsersList,
+        list: oldUsersList?.list.map((user) =>
+          user.id === userId
+            ? {
+                ...user,
+                beta: {
+                  ...user.beta,
+                  is_sent: true,
+                },
+              }
+            : user
+        ),
+      })
+
+      toast({
+        title: 'Success',
+        description: '승인 메일을 발송하였습니다.',
       })
     },
   })

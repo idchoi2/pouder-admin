@@ -3,31 +3,38 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Switch } from '@/components/ui/switch'
 import { USER_LIST_SIZE } from '@/configs/user.config'
-import { useToggleBetaUser, useUsersList } from '@/hooks/users.hook'
+import {
+  useSendBetaApprovalEmail,
+  useToggleBetaUser,
+  useUsersList,
+} from '@/hooks/users.hook'
 import { usersListParamsAtom } from '@/states'
 import { UserInterface } from '@/types'
-import { Checkbox, Pagination, Table } from 'antd'
+import { Pagination, Table } from 'antd'
+import { Check, Send } from 'lucide-react'
+import moment from 'moment'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
+import { Button } from '../ui/button'
+import { useToast } from '../ui/use-toast'
 
 function UsersList() {
   const router = useRouter()
   const params = useParams()
   const searchParams = useSearchParams()
+  const { toast } = useToast()
 
   // List Search Params
   const [usersListParams, setUsersListParams] =
     useRecoilState(usersListParamsAtom)
 
   // Hooks
-  const {
-    data: usersList,
-    isFetching,
-    isFetched,
-  } = useUsersList(usersListParams)
-  const { mutate: toggleBetaUser, isPending } =
+  const { data: usersList, isFetching } = useUsersList(usersListParams)
+  const { mutate: toggleBetaUser, isPending: isPendingToggle } =
     useToggleBetaUser(usersListParams)
+  const { mutate: sendBetaApprovalEmail, isPending: isPendingSend } =
+    useSendBetaApprovalEmail(usersListParams)
 
   useEffect(() => {
     setUsersListParams({
@@ -61,35 +68,72 @@ function UsersList() {
       width: 120,
     },
     {
+      title: '가입날짜',
+      key: 'created_at',
+      render: (user: UserInterface) => (
+        <time className="text-xs">
+          {moment(user.created_at).format('YYYY-MM-DD hh:mm:ss')}
+        </time>
+      ),
+      width: 110,
+    },
+    {
       title: '관리자',
       key: 'is_admin',
       render: (user: UserInterface) => (
         <div className="flex items-center space-x-2">
-          <Checkbox checked={user.is_admin} className="cursor-not-allowed" />
+          {user.is_admin && <Check size={16} />}
         </div>
       ),
       width: 60,
     },
     {
-      title: 'Waitlist 등록',
+      title: 'Waitlist',
       key: 'waitlist',
       render: (user: UserInterface) => (
         <div className="flex items-center space-x-2">
-          <Checkbox checked={!!user.beta} className="cursor-not-allowed" />
+          {!!user.beta && <Check size={16} />}
         </div>
       ),
-      width: 80,
+      width: 60,
     },
     {
-      title: 'Beta Tester 승인',
+      title: '메일발송',
+      key: 'is_sent',
+      render: (user: UserInterface) => (
+        <div className="flex items-center space-x-2">
+          {user.beta?.is_sent && <Check size={16} />}
+        </div>
+      ),
+      width: 60,
+    },
+    {
+      title: '승인하기',
       key: 'is_approved',
       render: (user: UserInterface) => (
         <div className="flex items-center space-x-2">
           <Switch
             checked={!!user.beta?.is_approved}
-            disabled={isPending || user.is_admin}
+            disabled={!user.beta || isPendingToggle || user.is_admin}
             onCheckedChange={(e) => onHandleToggleBetaUser(e, user.id)}
           />
+        </div>
+      ),
+      width: 80,
+    },
+    {
+      title: '발송하기',
+      key: 'send',
+      render: (user: UserInterface) => (
+        <div className="flex items-center space-x-2">
+          <Button
+            size={'icon'}
+            onClick={() => onHandleSendBetaApprovalEmail(user.id)}
+            disabled={
+              user.is_admin || !user.beta?.is_approved || isPendingSend
+            }>
+            <Send size={16} />
+          </Button>
         </div>
       ),
       width: 80,
@@ -110,6 +154,12 @@ function UsersList() {
     toggleBetaUser(userId)
   }
 
+  const onHandleSendBetaApprovalEmail = (userId: string) => {
+    if (confirm('승인 메일을 발송하시겠습니까?')) {
+      sendBetaApprovalEmail(userId)
+    }
+  }
+
   return (
     <div>
       {/* Table: 시작 */}
@@ -123,7 +173,7 @@ function UsersList() {
       {/* Table: 끝 */}
       {/* Pagination: 시작 */}
       <div className="flex justify-between items-center py-6">
-        <p>Total: {usersList?.pagination.total}</p>
+        <div className="text-sm">Total: {usersList?.pagination.total}</div>
         <div className="flex justify-center">
           <Pagination
             defaultCurrent={1}
