@@ -1,7 +1,6 @@
 import prisma from '@/app/prisma'
 import { USER_LIST_SIZE } from '@/configs/user.config'
 import { showErrorJsonResponse } from '@/lib/utils'
-import { UserInterface } from '@/types'
 import { getMe } from '@/utils/auth'
 import { checkAccount } from '@/utils/validation'
 import { NextRequest, NextResponse } from 'next/server'
@@ -33,34 +32,18 @@ export async function GET(request: NextRequest) {
     },
     orderBy: [
       {
-        created_at: 'asc',
+        created_at: 'desc',
       },
     ],
     skip: (page - 1) * USER_LIST_SIZE,
     take: USER_LIST_SIZE,
   })
 
-  const allUsersCount = await prisma.users.count({
+  const allUsersCount = await prisma.accounts.count({
     where: {
       deleted_at: null,
     },
   })
-
-  const usersWithBeta = JSON.parse(JSON.stringify(users))
-
-  // Beta users
-  const promise = await usersWithBeta.map(async (user: UserInterface) => {
-    const betaUsers = await prisma.beta_users.findFirst({
-      where: {
-        email: user.users?.email,
-        deleted_at: null,
-      },
-    })
-
-    user.beta = betaUsers
-  })
-
-  await Promise.all(promise)
 
   const pagination = {
     page,
@@ -70,7 +53,7 @@ export async function GET(request: NextRequest) {
   }
 
   return NextResponse.json({
-    list: usersWithBeta,
+    list: users,
     pagination,
   })
 }

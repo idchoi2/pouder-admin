@@ -68,6 +68,18 @@ function UsersList() {
       width: 120,
     },
     {
+      title: 'Bio',
+      key: 'email',
+      render: (user: UserInterface) => (
+        <div>
+          <p className="text-xs truncate whitespace-normal break-words w-36">
+            {user.bio || ''}
+          </p>
+        </div>
+      ),
+      width: 144,
+    },
+    {
       title: '가입날짜',
       key: 'created_at',
       render: (user: UserInterface) => (
@@ -88,21 +100,11 @@ function UsersList() {
       width: 60,
     },
     {
-      title: 'Waitlist',
-      key: 'waitlist',
-      render: (user: UserInterface) => (
-        <div className="flex items-center space-x-2">
-          {!!user.beta && <Check size={16} />}
-        </div>
-      ),
-      width: 60,
-    },
-    {
       title: '메일발송',
       key: 'is_sent',
       render: (user: UserInterface) => (
         <div className="flex items-center space-x-2">
-          {user.beta?.is_sent && <Check size={16} />}
+          {user.is_sent && <Check size={16} />}
         </div>
       ),
       width: 60,
@@ -113,9 +115,9 @@ function UsersList() {
       render: (user: UserInterface) => (
         <div className="flex items-center space-x-2">
           <Switch
-            checked={!!user.beta?.is_approved}
-            disabled={!user.beta || isPendingToggle || user.is_admin}
-            onCheckedChange={(e) => onHandleToggleBetaUser(e, user.id)}
+            checked={!!user.is_approved}
+            disabled={isPendingToggle || user.is_admin}
+            onCheckedChange={(e) => onHandleToggleBetaUser(e, Number(user.id))}
           />
         </div>
       ),
@@ -128,15 +130,13 @@ function UsersList() {
         <div className="flex items-center space-x-2 cursor-not-allowed">
           <Button
             variant={
-              user.is_admin || !user.beta?.is_approved || isPendingSend
+              user.is_admin || !user.is_approved || isPendingSend
                 ? 'ghost'
                 : 'default'
             }
             size={'icon'}
-            onClick={() => onHandleSendBetaApprovalEmail(user.id)}
-            disabled={
-              user.is_admin || !user.beta?.is_approved || isPendingSend
-            }>
+            onClick={() => onHandleSendBetaApprovalEmail(Number(user.id))}
+            disabled={user.is_admin || !user.is_approved || isPendingSend}>
             <Send size={16} />
           </Button>
         </div>
@@ -154,13 +154,22 @@ function UsersList() {
     router.push(`/users?page=${page}`)
   }
 
-  const onHandleToggleBetaUser = (checked: boolean, userId: string) => {
-    console.log('userId', userId)
+  const onHandleToggleBetaUser = (checked: boolean, userId: number) => {
+    toast({
+      title: 'Approving',
+      description: '승인중입니다.',
+    })
+
     toggleBetaUser(userId)
   }
 
-  const onHandleSendBetaApprovalEmail = (userId: string) => {
+  const onHandleSendBetaApprovalEmail = (userId: number) => {
     if (confirm('승인 메일을 발송하시겠습니까?')) {
+      toast({
+        title: 'Sending',
+        description: '승인 메일을 발송중입니다.',
+      })
+
       sendBetaApprovalEmail(userId)
     }
   }

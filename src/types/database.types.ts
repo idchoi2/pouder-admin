@@ -1,6 +1,6 @@
 import { LanguageType } from '@/types/global.types'
 import {
-  beta_users,
+  accounts,
   bookmark_chunks,
   bookmark_fields,
   bookmarks,
@@ -21,18 +21,9 @@ export interface AccountInterface {
   teams?: teams[]
 }
 
-export interface UserInterface {
-  id: string
-  email: string
-  name: string
-  bio: string | null
-  avatar: string | null
-  preferred_language: LanguageType | null
+export interface UserInterface extends accounts {
   teams?: teams[]
   users: users
-  is_admin?: boolean
-  beta: beta_users | null
-  created_at: string
 }
 
 export interface BookmarksInterface extends bookmarks {

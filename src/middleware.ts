@@ -28,6 +28,7 @@ export async function middleware(request: NextRequest) {
     .from('accounts')
     .select('*')
     .eq('user_id', data.user?.id)
+    .is('is_approved', true)
     .is('is_admin', true)
     .is('deleted_at', null)
     .single()
@@ -36,10 +37,9 @@ export async function middleware(request: NextRequest) {
   if (nonAuthUrls.includes(url) && isLogin) {
     return NextResponse.redirect(new URL('/', request.url).toString())
   }
-  // 로그인 필요 페이지 (/teams)
+  // 로그인 필요 페이지
   else if (authUrls.includes(url) && (!isLogin || !myAccount)) {
     if (isLogin) {
-      console.log('로그아웃')
       await setLogout()
       await supabase.auth.signOut()
     }

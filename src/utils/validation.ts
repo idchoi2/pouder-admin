@@ -91,19 +91,7 @@ export const checkUser = async (userId: number) => {
     },
   })
 
-  if (!account) return null
-
-  const betaUsers = await prisma.beta_users.findFirst({
-    where: {
-      email: account?.users?.email,
-      deleted_at: null,
-    },
-  })
-
-  return {
-    ...account,
-    beta: betaUsers,
-  }
+  return account
 }
 
 /**

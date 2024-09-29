@@ -16,7 +16,7 @@ export const getUsers = (params: UsersListSearchParamsInterface | null) => {
  * @param userId
  * @returns
  */
-export const toggleBetaUser = (userId: string) => {
+export const toggleBetaUser = (userId: number) => {
   return axiosInstance
     .put(`/api/users/beta/toggle/${userId}`)
     .then((res) => res.data)
@@ -27,7 +27,7 @@ export const toggleBetaUser = (userId: string) => {
  * @param userId
  * @returns
  */
-export const sendApprovalEmail = (userId: string) => {
+export const sendApprovalEmail = (userId: number) => {
   return axiosInstance
     .post(`/api/users/beta/email/${userId}`)
     .then((res) => res.data)

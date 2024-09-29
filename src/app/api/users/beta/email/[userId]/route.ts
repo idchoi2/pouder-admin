@@ -16,13 +16,13 @@ export async function POST(
   // User check
   const user = await checkUser(Number(params.userId))
 
-  if (!user || !user.users || !user.beta) {
+  if (!user || !user.users) {
     return showErrorJsonResponse('notFound')
   }
 
-  await prisma.beta_users.update({
+  await prisma.accounts.update({
     where: {
-      email: user.users.email || '',
+      id: user.id,
       deleted_at: null,
     },
     data: {

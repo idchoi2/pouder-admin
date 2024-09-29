@@ -25,11 +25,12 @@ export const useToggleBetaUser = (
   params: UsersListSearchParamsInterface | null
 ) => {
   const queryClient = useQueryClient()
+  const { toast } = useToast()
 
   return useMutation({
     mutationKey: [USER_KEY, params],
-    mutationFn: (userId: string) => toggleBetaUser(userId),
-    onSuccess: (userId: string) => {
+    mutationFn: (userId: number) => toggleBetaUser(userId),
+    onSuccess: (userId: number) => {
       const oldUsersList = queryClient.getQueryData<UsersListSearchInterface>([
         USER_KEY,
         params,
@@ -38,16 +39,18 @@ export const useToggleBetaUser = (
       queryClient.setQueryData([USER_KEY, params], {
         ...oldUsersList,
         list: oldUsersList?.list.map((user) =>
-          user.id === userId
+          Number(user.id) === Number(userId)
             ? {
                 ...user,
-                beta: {
-                  ...user.beta,
-                  is_approved: !user.beta?.is_approved,
-                },
+                is_approved: !user.is_approved,
               }
             : user
         ),
+      })
+
+      toast({
+        title: 'Success',
+        description: '완료 되었습니다.',
       })
     },
   })
@@ -61,8 +64,8 @@ export const useSendBetaApprovalEmail = (
 
   return useMutation({
     mutationKey: [USER_KEY, params],
-    mutationFn: (userId: string) => sendApprovalEmail(userId),
-    onSuccess: (userId: string) => {
+    mutationFn: (userId: number) => sendApprovalEmail(userId),
+    onSuccess: (userId: number) => {
       const oldUsersList = queryClient.getQueryData<UsersListSearchInterface>([
         USER_KEY,
         params,
@@ -71,13 +74,10 @@ export const useSendBetaApprovalEmail = (
       queryClient.setQueryData([USER_KEY, params], {
         ...oldUsersList,
         list: oldUsersList?.list.map((user) =>
-          user.id === userId
+          Number(user.id) === Number(userId)
             ? {
                 ...user,
-                beta: {
-                  ...user.beta,
-                  is_sent: true,
-                },
+                is_sent: true,
               }
             : user
         ),
