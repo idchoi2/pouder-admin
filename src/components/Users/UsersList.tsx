@@ -84,7 +84,7 @@ function UsersList() {
       key: 'created_at',
       render: (user: UserInterface) => (
         <time className="text-xs">
-          {moment(user.created_at).format('YYYY-MM-DD hh:mm:ss')}
+          {moment(user.created_at).format('YYYY-MM-DD HH:mm:ss')}
         </time>
       ),
       width: 110,

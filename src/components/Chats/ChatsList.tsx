@@ -110,7 +110,7 @@ function ChatsList() {
       key: 'created_at',
       render: (chat: ChatsInterface) => (
         <time className="text-xs">
-          {moment(chat.created_at).format('YYYY-MM-DD hh:mm:ss')}
+          {moment(chat.created_at).format('YYYY-MM-DD HH:mm:ss')}
         </time>
       ),
       width: 110,

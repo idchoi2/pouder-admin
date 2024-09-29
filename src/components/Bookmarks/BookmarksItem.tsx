@@ -98,7 +98,7 @@ export default function BookmarkItem({
           </div>
           <div className="pt-1">
             <Typography variant="muted" className="!text-[10px]">
-              {moment(bookmark.created_at).format('YYYY-MM-DD hh:mm:ss')}
+              {moment(bookmark.created_at).format('YYYY-MM-DD HH:mm:ss')}
             </Typography>
           </div>
         </div>
