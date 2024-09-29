@@ -125,8 +125,13 @@ function UsersList() {
       title: '발송하기',
       key: 'send',
       render: (user: UserInterface) => (
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 cursor-not-allowed">
           <Button
+            variant={
+              user.is_admin || !user.beta?.is_approved || isPendingSend
+                ? 'ghost'
+                : 'default'
+            }
             size={'icon'}
             onClick={() => onHandleSendBetaApprovalEmail(user.id)}
             disabled={

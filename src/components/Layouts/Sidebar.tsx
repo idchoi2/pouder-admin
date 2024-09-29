@@ -3,6 +3,7 @@
 import { meAtom } from '@/states'
 import { useRecoilState } from 'recoil'
 import SignOut from '../Auth/SignOut'
+import { DarkModeToggle } from './DarkModeToggle'
 import SidebarMenus from './SidebarMenus'
 
 function Sidebar() {
@@ -15,9 +16,14 @@ function Sidebar() {
         <div className="font-extrabold">Pouder</div>
         <SidebarMenus />
       </div>
-      <div className="flex justify-between items-center">
-        <div className="text-xs">{me?.email}</div>
-        <SignOut />
+      <div className="space-y-2">
+        <div className="flex items-end justify-end">
+          <DarkModeToggle />
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="text-xs">{me?.email}</div>
+          <SignOut />
+        </div>
       </div>
     </div>
   )

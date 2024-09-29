@@ -1,8 +1,9 @@
+import AntdThemeProvider from '@/components/AntdThemeProvider'
 import { AuthWrapper } from '@/components/AuthWrapper'
 import { DashboardWrapper } from '@/components/DashboardWrapper'
 import { ReactQueryClientProvider } from '@/components/ReactQueryClientProvider'
 import RecoilRootWrapper from '@/components/RecoilWrapper'
-import { ThemeProvider } from '@/components/ThemeProvider'
+import { ShadCnThemeProvider } from '@/components/ShadCnThemeProvider'
 import { Toaster } from '@/components/ui/toaster'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/utils/supabase/server'
@@ -32,16 +33,18 @@ export default async function RootLayout({
         <ReactQueryClientProvider>
           <RecoilRootWrapper>
             <AuthWrapper user={user}>
-              <ThemeProvider
+              <ShadCnThemeProvider
                 attribute="class"
                 defaultTheme="system"
                 enableSystem
                 disableTransitionOnChange>
-                <DashboardWrapper>
-                  <AntdRegistry>{children}</AntdRegistry>
-                </DashboardWrapper>
+                <AntdThemeProvider>
+                  <DashboardWrapper>
+                    <AntdRegistry>{children}</AntdRegistry>
+                  </DashboardWrapper>
+                </AntdThemeProvider>
                 <Toaster />
-              </ThemeProvider>
+              </ShadCnThemeProvider>
             </AuthWrapper>
           </RecoilRootWrapper>
         </ReactQueryClientProvider>
