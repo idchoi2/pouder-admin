@@ -11,7 +11,6 @@ function AntdThemeProvider({ children }: { children: ReactNode }) {
       theme={{
         algorithm: theme.darkAlgorithm,
         token: {
-          colorPrimary: 'hsl(var(--primary))',
           colorBgContainer: 'hsl(var(--background))',
           colorBorder: 'hsl(var(--border))',
           colorBorderSecondary: 'hsl(var(--border))',
@@ -30,7 +29,7 @@ function AntdThemeProvider({ children }: { children: ReactNode }) {
           },
           Pagination: {
             itemBg: 'hsl(var(--background))',
-            itemActiveBg: 'hsl(var(--primary))',
+            // itemActiveBg: 'hsl(var(--primary))',
           },
           Spin: {
             colorBgBase: 'hsl(var(--accent))',
