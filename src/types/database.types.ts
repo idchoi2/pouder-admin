@@ -49,4 +49,5 @@ export interface ChatsInterface extends chats {
   bookmarks?: BookmarksInterface
   dateLabel: string
   chat_bookmarks?: ChatBookmarksInterface[]
+  teams?: teams
 }

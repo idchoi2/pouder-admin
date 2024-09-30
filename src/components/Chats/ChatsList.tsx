@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 import { CHAT_LIST_SIZE } from '@/configs'
 import { useChatsList } from '@/hooks'
 import { chatsListParamsAtom } from '@/states'
@@ -106,6 +107,21 @@ function ChatsList() {
       width: 440,
     },
     {
+      title: 'Team',
+      key: 'team',
+      render: (chat: ChatsInterface) => (
+        <div className="space-y-2">
+          {chat.teams && (
+            <>
+              <div>{chat.teams.name}</div>
+              <Badge variant={'secondary'}>{chat.teams.plan}</Badge>
+            </>
+          )}
+        </div>
+      ),
+      width: 200,
+    },
+    {
       title: '등록날짜',
       key: 'created_at',
       render: (chat: ChatsInterface) => (
@@ -144,6 +160,7 @@ function ChatsList() {
           <Pagination
             defaultCurrent={1}
             showQuickJumper
+            showSizeChanger={false}
             current={chatsList?.pagination.page}
             total={chatsList?.pagination.total}
             pageSize={CHAT_LIST_SIZE}

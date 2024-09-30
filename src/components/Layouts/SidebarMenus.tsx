@@ -1,6 +1,6 @@
 'use client'
 
-import { Bookmark, Home, Search, User } from 'lucide-react'
+import { Bookmark, DatabaseZap, Home, Search, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '../ui/button'
@@ -71,6 +71,18 @@ function SidebarMenus() {
             className="flex  items-center space-x-2">
             <Search size={16} />
             <span>Search Histories</span>
+          </Link>
+        </Button>
+      </li>
+      <li>
+        <Button
+          variant={pathname.startsWith('/sites') ? 'default' : 'ghost'}
+          size={'sm'}
+          asChild
+          className="w-full block justify-start">
+          <Link href="/sites" className="flex  items-center space-x-2">
+            <DatabaseZap size={16} />
+            <span>Cached Sites</span>
           </Link>
         </Button>
       </li>

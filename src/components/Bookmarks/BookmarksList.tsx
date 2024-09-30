@@ -114,6 +114,7 @@ function BookmarksList() {
           <Pagination
             defaultCurrent={1}
             showQuickJumper
+            showSizeChanger={false}
             current={bookmarksList?.pagination.page}
             total={bookmarksList?.pagination.total}
             pageSize={BOOKMARK_LIST_SIZE}

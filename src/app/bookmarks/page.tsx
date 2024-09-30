@@ -7,6 +7,7 @@ async function BookmarksPages() {
     <LayoutAdmin>
       <div>
         <Typography variant="h3">Bookmarks</Typography>
+        <Typography variant="small">팀 저장소내 저장된 북마크 목록</Typography>
         <div className="py-10">
           <BookmarksList />
         </div>

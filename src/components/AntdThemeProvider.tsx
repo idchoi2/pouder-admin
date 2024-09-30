@@ -15,6 +15,9 @@ function AntdThemeProvider({ children }: { children: ReactNode }) {
           colorBgContainer: 'hsl(var(--background))',
           colorBorder: 'hsl(var(--border))',
           colorBorderSecondary: 'hsl(var(--border))',
+          colorLink: 'hsl(var(--primary))',
+          colorLinkActive: 'hsl(var(--accent))',
+          colorText: 'hsl(var(--foreground))',
         },
         components: {
           Table: {
@@ -24,6 +27,10 @@ function AntdThemeProvider({ children }: { children: ReactNode }) {
             colorText: 'hsl(var(--foreground))',
             headerColor: 'hsl(var(--foreground))',
             colorPrimary: 'hsl(var(--primary))',
+          },
+          Pagination: {
+            itemBg: 'hsl(var(--background))',
+            itemActiveBg: 'hsl(var(--primary))',
           },
           Spin: {
             colorBgBase: 'hsl(var(--accent))',

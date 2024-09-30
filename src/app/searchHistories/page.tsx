@@ -7,6 +7,7 @@ async function BookmarksPages() {
     <LayoutAdmin>
       <div>
         <Typography variant="h3">Search Histories</Typography>
+        <Typography variant="small">검색 기록</Typography>
         <div className="py-10">
           <ChatsList />
         </div>

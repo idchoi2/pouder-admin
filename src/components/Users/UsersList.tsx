@@ -213,6 +213,7 @@ function UsersList() {
           <Pagination
             defaultCurrent={1}
             showQuickJumper
+            showSizeChanger={false}
             current={usersList?.pagination.page}
             total={usersList?.pagination.total}
             pageSize={USER_LIST_SIZE}
