@@ -7,7 +7,14 @@ import { setLogout } from './utils/auth'
 /**
  * 로그인 상태가 필요한 페이지
  */
-const authUrls = ['/', '/users', '/teams', '/bookmarks', '/searchHistories']
+const authUrls = [
+  '/',
+  '/users',
+  '/teams',
+  '/bookmarks',
+  '/searchHistories',
+  '/sites',
+]
 
 /**
  * 로그아웃 상태가 필요한 페이지
