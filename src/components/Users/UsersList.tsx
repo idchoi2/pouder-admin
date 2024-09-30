@@ -18,6 +18,7 @@ import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
+import Typography from '../ui/typography'
 import { useToast } from '../ui/use-toast'
 
 function UsersList() {
@@ -52,15 +53,23 @@ function UsersList() {
       title: 'Profile',
       key: 'profile',
       render: (user: UserInterface) => (
-        <div className="flex items-center space-x-2">
-          <Avatar className="w-6 h-6">
-            <AvatarImage src={user.avatar as string} alt={user.name} />
-            <AvatarFallback>{user.name}</AvatarFallback>
-          </Avatar>
-          <div>{user.name}</div>
+        <div className="space-y-1">
+          <div className="flex items-center space-x-2">
+            <Avatar className="w-6 h-6">
+              <AvatarImage src={user.avatar as string} alt={user.name} />
+              <AvatarFallback>{user.name}</AvatarFallback>
+            </Avatar>
+            <div>{user.name}</div>
+          </div>
+
+          {user.bio && (
+            <div className="pl-8">
+              <Typography variant="muted">{user.bio || ''}</Typography>
+            </div>
+          )}
         </div>
       ),
-      width: 120,
+      width: 200,
     },
     {
       title: 'Email',
@@ -69,13 +78,11 @@ function UsersList() {
       width: 120,
     },
     {
-      title: 'Bio',
-      key: 'email',
+      title: 'Language',
+      key: 'language',
       render: (user: UserInterface) => (
         <div>
-          <p className="text-xs truncate whitespace-normal break-words w-36">
-            {user.bio || ''}
-          </p>
+          <Badge variant={'outline'}>{user.preferred_language || ''}</Badge>
         </div>
       ),
       width: 144,
@@ -90,7 +97,7 @@ function UsersList() {
               <li key={team_account_role.id}>
                 <Badge
                   variant={'outline'}
-                  className="text-xs truncate whitespace-normal break-words">
+                  className="truncate whitespace-normal break-words">
                   {team_account_role.teams?.name}
                 </Badge>
               </li>

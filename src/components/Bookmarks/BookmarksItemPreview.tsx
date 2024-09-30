@@ -14,7 +14,7 @@ export default function BookmarkItemPreview({
       <Link
         href={chatBookmark.bookmarks.url || ''}
         target="_blank"
-        className="w-full h-auto max-w-[400px] flex space-x-2 overflow-hidden !items-start truncate hover:underline">
+        className="w-full h-auto max-w-[340px] flex space-x-2 overflow-hidden !items-start truncate hover:underline">
         <Avatar className="flex-none w-4 h-4 mt-px rounded-none">
           <AvatarImage
             src={chatBookmark.bookmarks.favicon || ''}

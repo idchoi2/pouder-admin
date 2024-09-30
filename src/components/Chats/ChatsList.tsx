@@ -104,7 +104,7 @@ function ChatsList() {
           </Accordion>
         </div>
       ),
-      width: 440,
+      width: 340,
     },
     {
       title: 'Team',
@@ -119,7 +119,7 @@ function ChatsList() {
           )}
         </div>
       ),
-      width: 200,
+      width: 160,
     },
     {
       title: '등록날짜',
