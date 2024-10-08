@@ -11,7 +11,7 @@ export default async function HomePage() {
 
   return (
     <LayoutAdmin>
-      <Typography variant="h1">Hello, {user?.email}</Typography>
+      <Typography variant="h1">Hello! {user?.email}</Typography>
     </LayoutAdmin>
   )
 }
