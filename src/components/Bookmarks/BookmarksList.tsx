@@ -78,12 +78,20 @@ function BookmarksList() {
           {bookmark.teams && (
             <>
               <div>{bookmark.teams.name}</div>
-              <Badge variant={'secondary'}>{bookmark.teams.plan}</Badge>
+              <Badge variant={'outline'}>{bookmark.teams.plan}</Badge>
             </>
           )}
         </div>
       ),
       width: 200,
+    },
+    {
+      title: 'Application',
+      key: 'application',
+      render: (bookmark: BookmarksInterface) => (
+        <Badge variant={'outline'}>{bookmark.application_type}</Badge>
+      ),
+      width: 150,
     },
   ]
 

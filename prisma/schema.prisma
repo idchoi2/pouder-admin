@@ -472,10 +472,10 @@ model bookmark_chunks {
   created_at  DateTime               @default(now()) @db.Timestamptz(6)
   bookmark_id String?                @db.Uuid
   content     String?
-  embedding   Unsupported("vector")?
   team_id     String?                @db.Uuid
   chunk_type  Bookmark_Chunk_Type?
   deleted_at  DateTime?              @db.Timestamptz(6)
+  embedding   Unsupported("vector")?
   bookmarks   bookmarks?             @relation(fields: [bookmark_id], references: [id], onUpdate: NoAction)
   teams       teams?                 @relation(fields: [team_id], references: [id], onUpdate: NoAction)
 
@@ -485,37 +485,39 @@ model bookmark_chunks {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model bookmarks {
-  id              String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  created_at      DateTime          @default(now()) @db.Timestamptz(6)
-  updated_at      DateTime?         @db.Timestamptz(6)
-  deleted_at      DateTime?         @db.Timestamptz(6)
-  team_id         String?           @db.Uuid
-  url             String?
-  tld             String?
-  hostname        String?
-  title           String?
-  description     String?
-  favicon         String?
-  thumbnail       String?
-  sitename        String?
-  author          String?
-  charset         String?
-  tags            String[]
-  lang            String?
-  folder_id       String?           @db.Uuid
-  is_favorite     Boolean?          @default(false)
-  canonical       String?
-  website_type    Website_Type?
-  website_field   Website_Field?
-  account_id      BigInt?
-  bookmark_field  String?
-  bookmark_chunks bookmark_chunks[]
-  accounts        accounts?         @relation(fields: [account_id], references: [id], onUpdate: NoAction)
-  bookmark_fields bookmark_fields?  @relation(fields: [bookmark_field], references: [label], onUpdate: NoAction)
-  folders         folders?          @relation(fields: [folder_id], references: [id], onUpdate: NoAction)
-  teams           teams?            @relation(fields: [team_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  chat_bookmarks  chat_bookmarks[]
-  token_usages    token_usages[]
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at       DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime?         @db.Timestamptz(6)
+  deleted_at       DateTime?         @db.Timestamptz(6)
+  team_id          String?           @db.Uuid
+  url              String?
+  tld              String?
+  hostname         String?
+  title            String?
+  description      String?
+  favicon          String?
+  thumbnail        String?
+  sitename         String?
+  author           String?
+  charset          String?
+  tags             String[]
+  lang             String?
+  folder_id        String?           @db.Uuid
+  is_favorite      Boolean?          @default(false)
+  canonical        String?
+  website_type     Website_Type?
+  website_field    Website_Field?
+  account_id       BigInt?
+  bookmark_field   String?
+  body_contents    String?
+  application_type Application_Type? @default(WEB)
+  bookmark_chunks  bookmark_chunks[]
+  accounts         accounts?         @relation(fields: [account_id], references: [id], onUpdate: NoAction)
+  bookmark_fields  bookmark_fields?  @relation(fields: [bookmark_field], references: [label], onUpdate: NoAction)
+  folders          folders?          @relation(fields: [folder_id], references: [id], onUpdate: NoAction)
+  teams            teams?            @relation(fields: [team_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  chat_bookmarks   chat_bookmarks[]
+  token_usages     token_usages[]
 
   @@schema("public")
 }
@@ -555,14 +557,15 @@ model tags {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model chat_bookmarks {
-  id          BigInt     @id @default(autoincrement())
-  created_at  DateTime   @default(now()) @db.Timestamptz(6)
-  chat_id     String?    @db.Uuid
-  bookmark_id String?    @db.Uuid
+  id          BigInt                 @id @default(autoincrement())
+  created_at  DateTime               @default(now()) @db.Timestamptz(6)
+  chat_id     String?                @db.Uuid
+  bookmark_id String?                @db.Uuid
   order       Int?
-  similarity  Decimal?   @db.Decimal
-  bookmarks   bookmarks? @relation(fields: [bookmark_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  chats       chats?     @relation(fields: [chat_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  similarity  Decimal?               @db.Decimal
+  embedding   Unsupported("vector")?
+  bookmarks   bookmarks?             @relation(fields: [bookmark_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  chats       chats?                 @relation(fields: [chat_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
 }
@@ -868,5 +871,14 @@ enum Bookmark_Chunk_Type {
   MEMO
 
   @@map("Bookmark Chunk Type")
+  @@schema("public")
+}
+
+enum Application_Type {
+  WEB
+  CHROME_EXTENSION
+  APP
+
+  @@map("Application Type")
   @@schema("public")
 }
