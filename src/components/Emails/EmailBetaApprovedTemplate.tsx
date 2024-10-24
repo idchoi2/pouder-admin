@@ -1,4 +1,4 @@
-import { LINK_DISCORD } from '@/configs'
+import { LINK_CHROME_EXTENSION, LINK_DISCORD } from '@/configs'
 import * as React from 'react'
 import EmailFooter from './EmailFooter'
 
@@ -23,6 +23,10 @@ export const EmailBetaApprovedTemplate: React.FC<
       <p>
         지금 시작하세요:{' '}
         <a href="https://pouder.site/login">https://pouder.site/login</a>
+      </p>
+      <p>
+        크롬 익스텐션 설치를 통해 더욱 편리하게 Pouder를 사용하실 수 있습니다.
+        <a href={LINK_CHROME_EXTENSION}>크롬 익스텐션 다운로드</a>
       </p>
       <p>
         서비스 사용 중에 질문이 있거나 피드백을 남기고 싶으시면 Discord에서
