@@ -78,14 +78,14 @@ function UsersList() {
       width: 120,
     },
     {
-      title: 'Language',
+      title: '언어',
       key: 'language',
       render: (user: UserInterface) => (
         <div>
           <Badge variant={'outline'}>{user.preferred_language || ''}</Badge>
         </div>
       ),
-      width: 144,
+      width: 80,
     },
     {
       title: 'Teams',
@@ -123,6 +123,16 @@ function UsersList() {
       render: (user: UserInterface) => (
         <div className="flex items-center space-x-2">
           {user.is_admin && <Check size={16} />}
+        </div>
+      ),
+      width: 60,
+    },
+    {
+      title: '뉴스레터구독',
+      key: 'is_email_newsLetter',
+      render: (user: UserInterface) => (
+        <div className="flex items-center space-x-2">
+          {user.is_email_newsLetter && <Check size={16} />}
         </div>
       ),
       width: 60,
