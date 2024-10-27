@@ -515,6 +515,7 @@ model bookmarks {
   bookmark_field   String?
   body_contents    String?
   application_type Application_Type? @default(WEB)
+  summary          String?
   bookmark_chunks  bookmark_chunks[]
   accounts         accounts?         @relation(fields: [account_id], references: [id], onUpdate: NoAction)
   bookmark_fields  bookmark_fields?  @relation(fields: [bookmark_field], references: [label], onUpdate: NoAction)

@@ -5,6 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import Typography from '@/components/ui/typography'
 import { cn } from '@/lib/utils'
 import { BookmarksInterface } from '@/types'
+import { Bot } from 'lucide-react'
 import moment from 'moment'
 import { useParams } from 'next/navigation'
 import { MouseEvent } from 'react'
@@ -92,6 +93,14 @@ export default function BookmarkItem({
               </div>
             )}
         </div>
+        {bookmark.summary && (
+          <div className="w-full block pb-2">
+            <Typography variant="blockquote" className="text-wrap text-xs">
+              <Bot size={16} className="inline-block mr-1.5 -mt-1" />
+              {bookmark.summary}
+            </Typography>
+          </div>
+        )}
         <div className="pt-1">
           <Typography variant="muted" className="!text-[10px]">
             {moment(bookmark.created_at).format('YYYY-MM-DD HH:mm:ss')}
