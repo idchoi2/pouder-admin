@@ -883,6 +883,7 @@ enum Application_Type {
   WEB
   CHROME_EXTENSION
   APP
+  IMPORT_FROM_BROWSER
 
   @@map("Application Type")
   @@schema("public")
