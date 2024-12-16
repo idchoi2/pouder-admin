@@ -5,6 +5,7 @@ import {
   bookmark_fields,
   bookmarks,
   chat_bookmarks,
+  chat_conversations,
   chats,
   team_account_roles,
   teams,
@@ -48,6 +49,17 @@ export interface ChatsInterface extends chats {
   accounts: AccountInterface
   bookmarks?: BookmarksInterface
   dateLabel: string
-  chat_bookmarks?: ChatBookmarksInterface[]
+  selectedBookmarks?: BookmarksInterface[]
+  chat_bookmarks?: {
+    bookmarks?: BookmarksInterface
+  }[]
+  teams?: teams
+}
+
+export interface ChatConversationsInterface extends chat_conversations {
+  users?: User
+  accounts: AccountInterface
+  dateLabel: string
+  chats?: ChatsInterface[]
   teams?: teams
 }

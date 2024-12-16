@@ -435,6 +435,7 @@ model accounts {
   contact_id          String?
   users               users?               @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   bookmarks           bookmarks[]
+  chat_conversations  chat_conversations[]
   chats               chats[]
   folders             folders[]
   team_account_roles  team_account_roles[]
@@ -457,6 +458,7 @@ model teams {
   account_id           BigInt?
   bookmark_chunks      bookmark_chunks[]
   bookmarks            bookmarks[]
+  chat_conversations   chat_conversations[]
   chats                chats[]
   folders              folders[]
   team_account_roles   team_account_roles[]
@@ -516,6 +518,7 @@ model bookmarks {
   body_contents    String?
   application_type Application_Type? @default(WEB)
   summary          String?
+  keywords         String[]
   bookmark_chunks  bookmark_chunks[]
   accounts         accounts?         @relation(fields: [account_id], references: [id], onUpdate: NoAction)
   bookmark_fields  bookmark_fields?  @relation(fields: [bookmark_field], references: [label], onUpdate: NoAction)
@@ -577,18 +580,22 @@ model chat_bookmarks {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model chats {
-  id                String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  created_at        DateTime         @default(now()) @db.Timestamptz(6)
-  updated_at        DateTime?        @db.Timestamptz(6)
-  deleted_at        DateTime?        @db.Timestamptz(6)
-  team_id           String?          @db.Uuid
-  user_prompt       String?
-  search_conditions Json?            @db.Json
-  account_id        BigInt?
-  chat_bookmarks    chat_bookmarks[]
-  accounts          accounts?        @relation(fields: [account_id], references: [id], onUpdate: NoAction)
-  teams             teams?           @relation(fields: [team_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  token_usages      token_usages[]
+  id                   String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at           DateTime            @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime?           @db.Timestamptz(6)
+  deleted_at           DateTime?           @db.Timestamptz(6)
+  team_id              String?             @db.Uuid
+  user_prompt          String?
+  search_conditions    Json?               @db.Json
+  account_id           BigInt?
+  answer               String?
+  sources              String[]
+  chat_conversation_id String?             @db.Uuid
+  chat_bookmarks       chat_bookmarks[]
+  accounts             accounts?           @relation(fields: [account_id], references: [id], onUpdate: NoAction)
+  chat_conversations   chat_conversations? @relation(fields: [chat_conversation_id], references: [id], onUpdate: NoAction)
+  teams                teams?              @relation(fields: [team_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  token_usages         token_usages[]
 
   @@schema("public")
 }
@@ -703,6 +710,23 @@ model team_bookmark_fields {
   bookmark_field  String?
   bookmark_fields bookmark_fields? @relation(fields: [bookmark_field], references: [label], onUpdate: NoAction)
   teams           teams?           @relation(fields: [team_id], references: [id], onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model chat_conversations {
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
+  deleted_at  DateTime? @db.Timestamptz(6)
+  team_id     String?   @db.Uuid
+  account_id  BigInt?
+  title       String?
+  is_archived Boolean?
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  updated_at  DateTime? @db.Timestamptz(6)
+  accounts    accounts? @relation(fields: [account_id], references: [id], onUpdate: NoAction)
+  teams       teams?    @relation(fields: [team_id], references: [id], onUpdate: NoAction)
+  chats       chats[]
 
   @@schema("public")
 }
@@ -874,6 +898,7 @@ enum Bookmark_Chunk_Type {
   TYPE
   FIELD
   MEMO
+  KEYWORDS
 
   @@map("Bookmark Chunk Type")
   @@schema("public")

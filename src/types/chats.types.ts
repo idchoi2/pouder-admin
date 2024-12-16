@@ -1,4 +1,7 @@
-import { ChatsInterface } from '@/types/database.types'
+import {
+  ChatConversationsInterface,
+  ChatsInterface,
+} from '@/types/database.types'
 import { PaginationInterface } from '@/types/global.types'
 
 export interface ChatsListSearchParamsInterface {
@@ -9,5 +12,10 @@ export interface ChatsListSearchParamsInterface {
 
 export interface ChatsListSearchInterface {
   list: ChatsInterface[]
+  pagination: PaginationInterface
+}
+
+export interface ChatConversationsListSearchInterface {
+  list: ChatConversationsInterface[]
   pagination: PaginationInterface
 }

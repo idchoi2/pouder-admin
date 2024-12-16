@@ -23,21 +23,25 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1
 
-  const chats = await prisma.chats.findMany({
+  const chatConversations = await prisma.chat_conversations.findMany({
     where: {
       deleted_at: null,
     },
     include: {
       teams: true,
-      chat_bookmarks: {
+      chats: {
         include: {
-          bookmarks: {
-            select: {
-              id: true,
-              title: true,
-              url: true,
-              favicon: true,
-              tld: true,
+          chat_bookmarks: {
+            include: {
+              bookmarks: {
+                select: {
+                  id: true,
+                  title: true,
+                  url: true,
+                  favicon: true,
+                  tld: true,
+                },
+              },
             },
           },
         },
@@ -53,7 +57,7 @@ export async function GET(request: NextRequest) {
     take: CHAT_LIST_SIZE,
   })
 
-  const allChatsCount = await prisma.chats.count({
+  const allChatsCount = await prisma.chat_conversations.count({
     where: {
       deleted_at: null,
     },
@@ -67,7 +71,7 @@ export async function GET(request: NextRequest) {
   }
 
   return NextResponse.json({
-    list: chats,
+    list: chatConversations,
     pagination,
   })
 }

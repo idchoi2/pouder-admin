@@ -82,3 +82,17 @@ export const showErrorJsonObject = (errorType: ErrorType) => {
     message: errorMessage.message,
   }
 }
+
+/**
+ * Scroll chat conversation to bottom
+ * @returns
+ */
+export const scrollChatConversationBottom = () => {
+  const chatConversation = document.getElementById('chat-list')
+
+  if (!chatConversation) return
+
+  chatConversation.scrollTo({
+    top: chatConversation.scrollHeight,
+  })
+}

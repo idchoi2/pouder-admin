@@ -2,11 +2,25 @@ import { axiosInstance } from '@/configs/axios.config'
 import { BookmarksListSearchParamsInterface } from '@/types/bookmarks.types'
 
 /**
- * 북마크 목록 조회
+ * 채팅 대화 목록 조회
  * @returns
  */
-export const getChats = (params: BookmarksListSearchParamsInterface | null) => {
+export const getChatConversations = (
+  params: BookmarksListSearchParamsInterface | null
+) => {
   return axiosInstance
-    .get(`/api/chats?page=${params?.page}&sort=${params?.sort}&q=${params?.q}`)
+    .get(
+      `/api/chat_conversations?page=${params?.page}&sort=${params?.sort}&q=${params?.q}`
+    )
+    .then((res) => res.data)
+}
+
+/**
+ * 채팅 대화 상세 조회
+ * @returns
+ */
+export const getChats = (chatConversationId: string) => {
+  return axiosInstance
+    .get(`/api/chat_conversations/${chatConversationId}/chats`)
     .then((res) => res.data)
 }

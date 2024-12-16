@@ -1,0 +1,128 @@
+.answer-para {
+  line-height: 1.5;
+}
+
+.answer-para p {
+  margin-bottom: 12px;
+}
+
+.answer-para a {
+  font-weight: 700;
+}
+
+.answer-para a:hover {
+  text-decoration: underline;
+}
+
+.answer-para ul {
+  list-style-type: disc;
+  padding-left: 16px;
+}
+
+.answer-para ol {
+  list-style-type: decimal;
+  padding-left: 16px;
+}
+
+.answer-para ul,
+.answer-para ol {
+  margin-bottom: 12px;
+}
+
+.answer-para ul li:not(:first-child),
+.answer-para ol li:not(:first-child) {
+  margin-top: 8px;
+}
+
+.answer-para cite {
+  position: relative;
+}
+
+.answer-para cite a.cite-link {
+  background-color: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  border-radius: 4px;
+  color: hsl(var(--foreground));
+  display: inline-block;
+  padding: 1px 4px;
+  margin: 1px;
+  font-size: 9px;
+  line-height: 0.875rem;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-indent: -9999px;
+}
+.answer-para cite.ready a.cite-link {
+  text-indent: 0;
+}
+.answer-para cite a.cite-link:hover {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  text-decoration: none;
+}
+
+.answer-para cite .cite-popup {
+  /* display: none; */
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: max-content;
+  max-width: 280px;
+  z-index: 1;
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: 4px;
+  padding: 8px;
+  line-height: 1.5;
+  box-shadow: 0 0 8px hsl(var(--shadow));
+  font-style: normal;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.answer-para cite:hover .cite-popup {
+  z-index: 3000;
+  opacity: 1;
+  visibility: visible;
+}
+.answer-para cite:hover .cite-popup:hover {
+  background-color: hsl(var(--accent));
+}
+
+.answer-para cite:hover a {
+  text-decoration: none;
+}
+
+.answer-para code {
+  background-color: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  border-radius: 4px;
+  color: hsl(var(--foreground));
+  display: block;
+  padding: 2px 4px;
+  margin: 4px;
+  font-size: 9px;
+  text-wrap: wrap;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.answer-para table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.answer-para table th,
+.answer-para table td {
+  border: 1px solid hsl(var(--border));
+  padding: 8px;
+  line-height: 1.2;
+}
+
+.answer-para table th p,
+.answer-para table td p {
+  margin-bottom: 0;
+}

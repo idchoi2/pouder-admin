@@ -1,4 +1,7 @@
-import { ChatsListSearchParamsInterface } from '@/types'
+import {
+  ChatConversationsInterface,
+  ChatsListSearchParamsInterface,
+} from '@/types'
 import { atom } from 'recoil'
 
 /**
@@ -8,3 +11,15 @@ export const chatsListParamsAtom = atom<ChatsListSearchParamsInterface | null>({
   key: 'chatsListParams',
   default: null,
 })
+
+export const openChatConversationModalAtom = atom<boolean>({
+  key: 'openChatConversationModal',
+  default: false,
+})
+
+export const chatConversationInfoAtom = atom<ChatConversationsInterface | null>(
+  {
+    key: 'chatConversationInfo',
+    default: null,
+  }
+)
