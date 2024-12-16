@@ -99,9 +99,7 @@ function ChatConversationModal() {
 
   return (
     <Sheet open={openChatConversationModal} onOpenChange={onHandleCloseSheet}>
-      <SheetContent
-        onEscapeKeyDown={(e) => e.preventDefault()}
-        className="max-w-full w-full lg:w-[900px] px-0 pb-0">
+      <SheetContent className="max-w-full w-full lg:w-[900px] px-0 pb-0">
         <SheetHeader className="px-6">
           <SheetTitle>
             {chatConversationInfo?.title || 'Chat Conversation'}

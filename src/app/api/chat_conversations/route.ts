@@ -30,20 +30,8 @@ export async function GET(request: NextRequest) {
     include: {
       teams: true,
       chats: {
-        include: {
-          chat_bookmarks: {
-            include: {
-              bookmarks: {
-                select: {
-                  id: true,
-                  title: true,
-                  url: true,
-                  favicon: true,
-                  tld: true,
-                },
-              },
-            },
-          },
+        select: {
+          id: true,
         },
       },
       accounts: true,
