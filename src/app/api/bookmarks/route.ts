@@ -26,11 +26,30 @@ export async function GET(request: NextRequest) {
   const bookmarks = await prisma.bookmarks.findMany({
     where: {
       deleted_at: null,
+      accounts: {
+        deleted_at: null,
+      },
     },
-    include: {
+    /* include: {
       teams: true,
       bookmark_fields: true,
       accounts: true,
+    }, */
+    select: {
+      id: true,
+      title: true,
+      url: true,
+      teams: true,
+      bookmark_field: true,
+      bookmark_fields: true,
+      accounts: true,
+      summary: true,
+      keywords: true,
+      tags: true,
+      created_at: true,
+      favicon: true,
+      application_type: true,
+      body_contents: true,
     },
     orderBy: [
       {
@@ -44,6 +63,9 @@ export async function GET(request: NextRequest) {
   const allBookmarksCount = await prisma.bookmarks.count({
     where: {
       deleted_at: null,
+      accounts: {
+        deleted_at: null,
+      },
     },
   })
 

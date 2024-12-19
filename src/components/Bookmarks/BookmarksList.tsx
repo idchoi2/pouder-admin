@@ -44,7 +44,10 @@ function BookmarksList() {
       key: 'bookmark',
       render: (bookmark: BookmarksInterface) => (
         <div className="truncate overflow-hidden">
-          <BookmarkItem bookmark={bookmark} />
+          <BookmarkItem
+            bookmark={bookmark}
+            bookmarksListParams={bookmarksListParams}
+          />
         </div>
       ),
       width: 680,

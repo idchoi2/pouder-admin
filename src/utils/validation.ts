@@ -142,14 +142,12 @@ export const checkTeam = async (
 /**
  * Check if the bookmark exists
  * @param bookmarkId
- * @param teamId
  * @returns
  */
-export const checkBookmark = async (bookmarkId: string, teamId: string) => {
+export const checkBookmark = async (bookmarkId: string) => {
   const bookmark = await prisma.bookmarks.findFirst({
     where: {
       id: bookmarkId,
-      team_id: teamId,
     },
   })
 

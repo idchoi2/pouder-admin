@@ -1,3 +1,4 @@
+export * from './ai.types'
 export * from './bookmarks.types'
 export * from './chats.types'
 export * from './database.types'

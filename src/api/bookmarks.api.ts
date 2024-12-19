@@ -14,3 +14,14 @@ export const getBookmarks = (
     )
     .then((res) => res.data)
 }
+
+/**
+ * 북마크 키워드 생성
+ * @param bookmarkId
+ * @returns
+ */
+export const generateKeywordsForBookmark = (bookmarkId: string) => {
+  return axiosInstance
+    .put(`/api/bookmarks/${bookmarkId}/keywords`)
+    .then((res) => res.data)
+}
