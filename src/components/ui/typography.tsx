@@ -31,7 +31,7 @@ const Typography: React.FC<TypographyProps> = ({
   switch (variant) {
     case 'h1':
       Component = 'h1'
-      typoClassName = 'text-4xl font-extrabold tracking-tight lg:text-5xl'
+      typoClassName = 'text-4xl font-bold tracking-tight lg:text-5xl'
       break
     case 'h2':
       Component = 'h2'
