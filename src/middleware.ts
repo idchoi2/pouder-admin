@@ -14,6 +14,7 @@ const authUrls = [
   '/bookmarks',
   '/searchHistories',
   '/sites',
+  '/feedbacks',
 ]
 
 /**
