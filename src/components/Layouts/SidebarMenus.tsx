@@ -1,6 +1,13 @@
 'use client'
 
-import { Bookmark, DatabaseZap, Home, Search, User } from 'lucide-react'
+import {
+  Bookmark,
+  Home,
+  MessageSquare,
+  Search,
+  User,
+  Users,
+} from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '../ui/button'
@@ -34,18 +41,18 @@ function SidebarMenus() {
           </Link>
         </Button>
       </li>
-      {/* <li>
+      <li>
         <Button
           variant={'ghost'}
           size={'sm'}
-          asChild
+          disabled
           className="w-full block justify-start">
           <Link href="/teams" className="flex  items-center space-x-2">
             <Users size={16} />
             <span>Teams</span>
           </Link>
         </Button>
-      </li> */}
+      </li>
       <li>
         <Button
           variant={pathname.startsWith('/users') ? 'default' : 'ghost'}
@@ -76,13 +83,13 @@ function SidebarMenus() {
       </li>
       <li>
         <Button
-          variant={pathname.startsWith('/sites') ? 'default' : 'ghost'}
+          variant={pathname.startsWith('/feedbacks') ? 'default' : 'ghost'}
           size={'sm'}
           asChild
           className="w-full block justify-start">
-          <Link href="/sites" className="flex  items-center space-x-2">
-            <DatabaseZap size={16} />
-            <span>Cached Sites</span>
+          <Link href="/feedbacks" className="flex  items-center space-x-2">
+            <MessageSquare size={16} />
+            <span>Feedbacks</span>
           </Link>
         </Button>
       </li>

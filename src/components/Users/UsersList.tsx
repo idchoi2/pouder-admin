@@ -1,7 +1,6 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Switch } from '@/components/ui/switch'
 import { USER_LIST_SIZE } from '@/configs/user.config'
 import {
   useSendBetaApprovalEmail,
@@ -11,13 +10,12 @@ import {
 import { usersListParamsAtom } from '@/states'
 import { UserInterface } from '@/types'
 import { Pagination, Table } from 'antd'
-import { Check, Send } from 'lucide-react'
+import { Check } from 'lucide-react'
 import moment from 'moment'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { Badge } from '../ui/badge'
-import { Button } from '../ui/button'
 import Typography from '../ui/typography'
 import { useToast } from '../ui/use-toast'
 
@@ -135,9 +133,9 @@ function UsersList() {
           {user.is_email_newsLetter && <Check size={16} />}
         </div>
       ),
-      width: 60,
+      width: 100,
     },
-    {
+    /* {
       title: '메일발송',
       key: 'is_sent',
       render: (user: UserInterface) => (
@@ -180,7 +178,7 @@ function UsersList() {
         </div>
       ),
       width: 80,
-    },
+    }, */
   ]
 
   /**

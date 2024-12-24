@@ -7,6 +7,7 @@ import {
   chat_bookmarks,
   chat_conversations,
   chats,
+  feedbacks,
   team_account_roles,
   teams,
   users,
@@ -62,4 +63,8 @@ export interface ChatConversationsInterface extends chat_conversations {
   dateLabel: string
   chats?: ChatsInterface[]
   teams?: teams
+}
+
+export interface FeedbacksInterface extends feedbacks {
+  accounts?: AccountInterface
 }
