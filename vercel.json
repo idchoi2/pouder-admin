@@ -3,10 +3,6 @@
     {
       "path": "/api/cron/bookmarks/chunks",
       "schedule": "*/10 * * * *"
-    },
-    {
-      "path": "/api/cron/bookmarks/keywords",
-      "schedule": "*/10 * * * *"
     }
   ]
 }
