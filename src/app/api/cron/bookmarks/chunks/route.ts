@@ -34,6 +34,9 @@ export async function GET(request: NextRequest) {
           deleted_at: null,
         },
       },
+      keywords: {
+        isEmpty: false,
+      },
     },
     select: {
       id: true,
