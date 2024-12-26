@@ -18,6 +18,11 @@ const authUrls = [
 ]
 
 /**
+ * 크론 상태가 필요한 페이지
+ */
+const cronUrls = '/api/cron'
+
+/**
  * 로그아웃 상태가 필요한 페이지
  */
 const nonAuthUrls = ['/login']
@@ -55,7 +60,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
   // API 로그인 확인
-  else if (url.startsWith('/api') && !isLogin) {
+  else if (url.startsWith('/api') && !url.startsWith(cronUrls) && !isLogin) {
     return showErrorJsonResponse('unauthorized')
   }
 
