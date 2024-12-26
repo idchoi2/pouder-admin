@@ -56,8 +56,6 @@ export async function GET(request: NextRequest) {
     take: BOOKMARK_CRON_SIZE,
   })
 
-  console.log(bookmarks.map((x) => x.id))
-
   const promises = bookmarks.map(async (bookmark) => {
     const keywords = bookmark.keywords || []
     const tags = bookmark.tags || []
