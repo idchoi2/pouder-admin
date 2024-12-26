@@ -39,6 +39,9 @@ export interface BookmarksInterface extends bookmarks {
   accounts?: AccountInterface
   bookmark_fields?: bookmark_fields
   chunks?: bookmark_chunks[]
+  _count?: {
+    bookmark_chunks: number
+  }
 }
 
 export interface ChatBookmarksInterface extends chat_bookmarks {

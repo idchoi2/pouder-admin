@@ -25,3 +25,14 @@ export const generateKeywordsForBookmark = (bookmarkId: string) => {
     .put(`/api/bookmarks/${bookmarkId}/keywords`)
     .then((res) => res.data)
 }
+
+/**
+ * 북마크 Chunks 생성
+ * @param bookmarkId
+ * @returns
+ */
+export const generateChunksForBookmark = (bookmarkId: string) => {
+  return axiosInstance
+    .put(`/api/bookmarks/${bookmarkId}/chunks`)
+    .then((res) => res.data)
+}

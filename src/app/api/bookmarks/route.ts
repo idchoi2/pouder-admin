@@ -50,6 +50,9 @@ export async function GET(request: NextRequest) {
       favicon: true,
       application_type: true,
       body_contents: true,
+      _count: {
+        select: { bookmark_chunks: true },
+      },
     },
     orderBy: [
       {

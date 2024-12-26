@@ -1,4 +1,8 @@
-import { generateKeywordsForBookmark, getBookmarks } from '@/api/bookmarks.api'
+import {
+  generateChunksForBookmark,
+  generateKeywordsForBookmark,
+  getBookmarks,
+} from '@/api/bookmarks.api'
 import { BookmarksInterface } from '@/types'
 import {
   BookmarksListSearchInterface,
@@ -44,6 +48,40 @@ export const useUpdateKeywordsBookmarks = (
         ...oldBookmarksPagination,
         list: oldBookmarksPagination.list.map((bookmark) =>
           bookmark.id === updatedBookmark.id ? updatedBookmark : bookmark
+        ),
+      })
+    },
+  })
+}
+
+export const useUpdateChunksBookmarks = (
+  params: BookmarksListSearchParamsInterface | null
+) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationKey: [BOOKMARK_KEY, params],
+    mutationFn: async (bookmarkId: string) => {
+      return await generateChunksForBookmark(bookmarkId)
+    },
+    onSuccess: (generatedChunksCount: number, bookmarkId: string) => {
+      const oldBookmarksPagination =
+        queryClient.getQueryData<BookmarksListSearchInterface>([
+          BOOKMARK_KEY,
+          params,
+        ]) as BookmarksListSearchInterface
+
+      queryClient.setQueryData([BOOKMARK_KEY, params], {
+        ...oldBookmarksPagination,
+        list: oldBookmarksPagination.list.map((bookmark) =>
+          bookmark.id === bookmarkId
+            ? {
+                ...bookmark,
+                _count: {
+                  bookmark_chunks: generatedChunksCount,
+                },
+              }
+            : bookmark
         ),
       })
     },

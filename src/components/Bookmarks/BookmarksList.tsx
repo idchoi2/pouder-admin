@@ -2,14 +2,16 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { BOOKMARK_LIST_SIZE } from '@/configs'
-import { useBookmarksList } from '@/hooks'
+import { useBookmarksList, useUpdateChunksBookmarks } from '@/hooks'
 import { bookmarksListParamsAtom } from '@/states'
 import { BookmarksInterface } from '@/types'
 import { Pagination, Table } from 'antd'
+import { Loader } from 'lucide-react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { Badge } from '../ui/badge'
+import { Button } from '../ui/button'
 import { useToast } from '../ui/use-toast'
 import BookmarkItem from './BookmarksItem'
 
@@ -27,6 +29,8 @@ function BookmarksList() {
   // Hooks
   const { data: bookmarksList, isFetching } =
     useBookmarksList(bookmarksListParams)
+  const { mutate: updateChunks, isPending } =
+    useUpdateChunksBookmarks(bookmarksListParams)
 
   useEffect(() => {
     setBookmarksListParams({
@@ -95,6 +99,36 @@ function BookmarksList() {
         <Badge variant={'outline'}>{bookmark.application_type}</Badge>
       ),
       width: 150,
+    },
+    {
+      title: 'Bookmark Chunks',
+      key: 'chunks',
+      render: (bookmark: BookmarksInterface) => (
+        <div className="space-y-4">
+          {!bookmark._count?.bookmark_chunks ||
+          bookmark._count?.bookmark_chunks === 0 ? (
+            <Button
+              variant={'default'}
+              size={'sm'}
+              onClick={() => {
+                if (confirm('Generate Chunks?')) {
+                  updateChunks(bookmark.id)
+                }
+              }}
+              disabled={isPending}>
+              {isPending ? (
+                <Loader size={16} className="mr-2 animate-spin" />
+              ) : null}
+              Generate Chunks
+            </Button>
+          ) : (
+            <Badge variant={'outline'}>
+              {bookmark._count?.bookmark_chunks}
+            </Badge>
+          )}
+        </div>
+      ),
+      width: 100,
     },
   ]
 
