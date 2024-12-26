@@ -1,6 +1,7 @@
 import prisma from '@/app/prisma'
 import { registry } from '@/app/registry'
-import { AI_COMMAND_OPTIONS, BOOKMARK_LIST_SIZE } from '@/configs'
+import { AI_COMMAND_OPTIONS } from '@/configs'
+import { BOOKMARK_CRON_SIZE } from '@/configs/bookmark.config'
 import { showErrorJsonResponse } from '@/lib/utils'
 import { BookmarkChunksContentsInterface } from '@/types'
 import { createClient } from '@/utils/supabase/server'
@@ -50,7 +51,7 @@ export async function GET(request: NextRequest) {
         created_at: 'desc',
       },
     ],
-    take: BOOKMARK_LIST_SIZE,
+    take: BOOKMARK_CRON_SIZE,
   })
 
   const summarizeCommand = AI_COMMAND_OPTIONS.find(
@@ -64,6 +65,8 @@ export async function GET(request: NextRequest) {
   if (!keywordsCommand) {
     return showErrorJsonResponse('notFound')
   }
+
+  console.log(bookmarks.map((x) => x.id))
 
   const promises = bookmarks.map(async (bookmark) => {
     // Set messages
@@ -190,12 +193,15 @@ export async function GET(request: NextRequest) {
 
       if (error && process.env.NODE_ENV === 'development') console.log(error)
 
+      console.log(bodyChunks)
+
       // Update bookmark
       const updatedBookmark = await prisma.bookmarks.update({
         where: { id: bookmark.id },
         data: {
           keywords,
           summary: bookmark.summary || summarizedText,
+          updated_at: new Date(),
         },
       })
     }

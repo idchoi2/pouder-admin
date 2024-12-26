@@ -1,10 +1,7 @@
 import prisma from '@/app/prisma'
 import { registry } from '@/app/registry'
-import {
-  AI_COMMAND_OPTIONS,
-  BOOKMARK_CRON_SIZE,
-  BOOKMARK_LIST_SIZE,
-} from '@/configs'
+import { AI_COMMAND_OPTIONS, BOOKMARK_CRON_SIZE } from '@/configs'
+import { BODY_TEXT_CHUNKS_SIZE } from '@/configs/bookmark.config'
 import { BookmarkChunksContentsInterface } from '@/types'
 import { createClient } from '@/utils/supabase/server'
 import { Bookmark_Chunk_Type } from '@prisma/client'
@@ -59,13 +56,22 @@ export async function GET(request: NextRequest) {
         created_at: 'desc',
       },
     ],
-    take: BOOKMARK_LIST_SIZE,
+    take: BOOKMARK_CRON_SIZE,
   })
+
+  console.log(bookmarks.map((x) => x.id))
 
   const promises = bookmarks.map(async (bookmark) => {
     const keywords = bookmark.keywords || []
     const tags = bookmark.tags || []
     const bodyContents = bookmark.body_contents
+
+    // Remove previous chunks
+    await prisma.bookmark_chunks.deleteMany({
+      where: {
+        bookmark_id: bookmark.id,
+      },
+    })
 
     // Get bookmark data
     let bodyContentsChunks: BookmarkChunksContentsInterface[] = []
@@ -73,10 +79,10 @@ export async function GET(request: NextRequest) {
     if (bodyContents) {
       const bodyWords = bodyContents.split(' ')
 
-      for (let i = 0; i < bodyWords.length; i += BOOKMARK_CRON_SIZE) {
+      for (let i = 0; i < bodyWords.length; i += BODY_TEXT_CHUNKS_SIZE) {
         bodyContentsChunks.push({
           type: 'BODY',
-          content: bodyWords.slice(i, i + BOOKMARK_CRON_SIZE).join(' '),
+          content: bodyWords.slice(i, i + BODY_TEXT_CHUNKS_SIZE).join(' '),
         })
       }
     }
