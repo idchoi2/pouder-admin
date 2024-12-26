@@ -14,6 +14,7 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'Pouder Admin',
   description: 'Pouder Admin',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL || 'https://pouder.site'),
 }
 
 export default async function RootLayout({
