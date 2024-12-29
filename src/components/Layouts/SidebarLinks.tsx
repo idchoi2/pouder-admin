@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { DatabaseZap, Network } from 'lucide-react'
+import { DatabaseZap, FolderTree, Network } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -8,6 +8,18 @@ function SidebarLinks() {
 
   return (
     <ul>
+      <li>
+        <Button
+          variant={pathname.startsWith('/categories') ? 'default' : 'ghost'}
+          size={'sm'}
+          asChild
+          className="w-full block justify-start">
+          <Link href="/categories" className="flex  items-center space-x-2">
+            <FolderTree size={16} />
+            <span>Categories</span>
+          </Link>
+        </Button>
+      </li>
       <li>
         <Button
           variant={pathname.startsWith('/sites') ? 'default' : 'ghost'}

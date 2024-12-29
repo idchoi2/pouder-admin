@@ -3,10 +3,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { SITE_LIST_SIZE } from '@/configs/site.config'
 import { useFeedbacksList } from '@/hooks/feedbacks.hook'
-import { useDeleteSite } from '@/hooks/sites.hook'
 import { feedbacksListParamsAtom } from '@/states/atoms/feedbacks.atoms'
 import { FeedbacksInterface } from '@/types/database.types'
-import { sites } from '@prisma/client'
 import { Pagination, Table } from 'antd'
 import moment from 'moment'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
@@ -28,8 +26,6 @@ function FeedbacksList() {
   // Hooks
   const { data: feedbacksList, isFetching } =
     useFeedbacksList(feedbacksListParams)
-  const { mutate: deleteSite, isPending: isPendingDelete } =
-    useDeleteSite(feedbacksListParams)
 
   useEffect(() => {
     setFeedbacksListParams({
@@ -96,16 +92,6 @@ function FeedbacksList() {
    */
   const onHandleChangePagination = (page: number, size: number) => {
     router.push(`/sites?page=${page}`)
-  }
-
-  /**
-   * 사이트 삭제
-   * @param site
-   */
-  const onHandleConfirmDeleteSite = (site: sites) => {
-    if (confirm('Are you sure you want to delete this site?')) {
-      deleteSite(Number(site.id))
-    }
   }
 
   return (

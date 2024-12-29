@@ -71,3 +71,9 @@ export interface ChatConversationsInterface extends chat_conversations {
 export interface FeedbacksInterface extends feedbacks {
   accounts?: AccountInterface
 }
+
+export interface BookmarkFieldsInterface extends bookmark_fields {
+  _count?: {
+    bookmarks: number
+  }
+}
