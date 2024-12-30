@@ -73,7 +73,6 @@ export async function GET(request: NextRequest) {
   }
 
   const promises = bookmarks.map(async (bookmark) => {
-    console.log(bookmark.url)
     const htmlContents = await requestUrl(bookmark.url as string)
 
     // Get bookmark data
