@@ -1,10 +1,7 @@
 import prisma from '@/app/prisma'
 import { registry } from '@/app/registry'
 import { AI_COMMAND_OPTIONS } from '@/configs'
-import {
-  BOOKMARK_CRON_SIZE,
-  BROKEN_BOOKMARK_IDS,
-} from '@/configs/bookmark.config'
+import { BOOKMARK_CRON_SIZE } from '@/configs/bookmark.config'
 import { showErrorJsonResponse } from '@/lib/utils'
 import { getBookmarkData, requestUrl } from '@/utils/bookmark'
 import { CoreMessage, generateObject, generateText } from 'ai'
@@ -43,12 +40,6 @@ export async function GET(request: NextRequest) {
           },
         },
       ],
-      // Exclude broken bookmarks
-      NOT: {
-        id: {
-          in: BROKEN_BOOKMARK_IDS,
-        },
-      },
     },
     select: {
       id: true,

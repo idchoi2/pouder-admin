@@ -1,10 +1,7 @@
 import prisma from '@/app/prisma'
 import { registry } from '@/app/registry'
 import { AI_COMMAND_OPTIONS, BOOKMARK_CRON_SIZE } from '@/configs'
-import {
-  BODY_TEXT_CHUNKS_SIZE,
-  BROKEN_BOOKMARK_IDS,
-} from '@/configs/bookmark.config'
+import { BODY_TEXT_CHUNKS_SIZE } from '@/configs/bookmark.config'
 import { BookmarkChunksContentsInterface } from '@/types'
 import { createClient } from '@/utils/supabase/server'
 import { Bookmark_Chunk_Type } from '@prisma/client'
@@ -38,12 +35,6 @@ export async function GET(request: NextRequest) {
       bookmark_chunks: {
         none: {
           deleted_at: null,
-        },
-      },
-      // Exclude broken bookmarks
-      NOT: {
-        id: {
-          in: BROKEN_BOOKMARK_IDS,
         },
       },
     },
