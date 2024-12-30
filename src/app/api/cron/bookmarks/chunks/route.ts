@@ -26,6 +26,9 @@ export async function GET(request: NextRequest) {
       accounts: {
         deleted_at: null,
       },
+      body_contents: {
+        not: null,
+      },
       keywords: {
         isEmpty: false,
       },
