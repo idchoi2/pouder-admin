@@ -15,6 +15,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET(request: NextRequest) {
   // Check if request is authorized
   if (
+    process.env.NODE_ENV !== 'development' &&
     request.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`
   ) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -102,7 +103,6 @@ export async function GET(request: NextRequest) {
         type: 'FIELD' as Bookmark_Chunk_Type,
         content: bookmark.bookmark_field || '',
       },
-      ...bodyContentsChunks,
       ...keywords.map((term) => ({
         type: 'KEYWORDS' as Bookmark_Chunk_Type,
         content: term,
@@ -145,5 +145,5 @@ export async function GET(request: NextRequest) {
 
   await Promise.all(promises)
 
-  return NextResponse.json(bookmarks)
+  return NextResponse.json({ success: true })
 }

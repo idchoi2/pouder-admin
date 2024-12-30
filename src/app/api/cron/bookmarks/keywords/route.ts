@@ -15,9 +15,10 @@ import { z } from 'zod'
 export async function GET(request: NextRequest) {
   // Check if request is authorized
   if (
+    process.env.NODE_ENV !== 'development' &&
     request.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`
   ) {
-    // return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   const bookmarks = await prisma.bookmarks.findMany({
@@ -188,5 +189,5 @@ export async function GET(request: NextRequest) {
 
   await Promise.all(promises)
 
-  return NextResponse.json(bookmarks)
+  return NextResponse.json({ success: true })
 }
