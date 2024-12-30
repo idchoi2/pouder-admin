@@ -315,36 +315,6 @@ export async function getBookmarkDataWithoutContents(url: string) {
 
 /**
  * Request bookmark url
- * @param url
- * @returns
- */
-export const requestUrlUsingCurl = async (url: string) => {
-  if (!process.env.URL_PARSER_URL) return ''
-
-  try {
-    const res = await fetch(process.env.URL_PARSER_URL + '/curl', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        url,
-      }),
-    })
-
-    const status = await res.status
-    const html = await res.text()
-
-    return status === 200 ? html : ''
-  } catch (e) {
-    console.error(e)
-    return ''
-  }
-}
-
-/**
- * Request bookmark url
  * @param urlParsed
  * @returns
  */
@@ -386,13 +356,13 @@ export const requestUrlUsingPuppeteer = async (url: string) => {
   if (!process.env.URL_PARSER_URL) return ''
 
   try {
-    const res = await fetch(process.env.URL_PARSER_URL + '/puppeteer', {
+    const res = await fetch(process.env.URL_PARSER_URL + '/api/url', {
       method: 'POST',
       signal: AbortSignal.timeout(TIMEOUT_URL_PARSER),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Token: process.env.URL_PARSER_TOKEN || '',
+        Authorization: `Bearer ${process.env.URL_PARSER_TOKEN}`,
       },
       body: JSON.stringify({
         url,
