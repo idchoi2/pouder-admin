@@ -6,12 +6,13 @@ import { useBookmarksList, useUpdateChunksBookmarks } from '@/hooks'
 import { bookmarksListParamsAtom } from '@/states'
 import { BookmarksInterface } from '@/types'
 import { Pagination, Table } from 'antd'
-import { Loader } from 'lucide-react'
+import { Loader, Search } from 'lucide-react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
+import { Input } from '../ui/input'
 import { useToast } from '../ui/use-toast'
 import BookmarkItem from './BookmarksItem'
 
@@ -32,6 +33,10 @@ function BookmarksList() {
   const { mutate: updateChunks, isPending } =
     useUpdateChunksBookmarks(bookmarksListParams)
 
+  // State
+  const [keyword, setKeyword] = useState<string>('')
+
+  // Effect
   useEffect(() => {
     setBookmarksListParams({
       ...bookmarksListParams,
@@ -39,6 +44,8 @@ function BookmarksList() {
       sort: searchParams.get('sort') || '',
       q: searchParams.get('q') || '',
     })
+
+    setKeyword(searchParams.get('q') || '')
   }, [searchParams])
 
   // Table columns
@@ -141,8 +148,26 @@ function BookmarksList() {
     router.push(`/bookmarks?page=${page}`)
   }
 
+  const onHandleSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    router.push(`/bookmarks?page=1&q=${keyword}`)
+  }
+
   return (
-    <div>
+    <div className="space-y-4">
+      {/* 검색 필터: 시작 */}
+      <form onSubmit={onHandleSearch} className="relative">
+        <Input
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          className="pr-10"
+        />
+        <Button type="submit" size={'icon'} className="absolute top-0 right-0">
+          <Search size={20} />
+        </Button>
+      </form>
+      {/* 검색 필터: 끝 */}
       {/* Table: 시작 */}
       <Table
         columns={tableCols}

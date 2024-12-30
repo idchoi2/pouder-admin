@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
   // Get params
   const searchParams = request.nextUrl.searchParams
   const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1
+  const keyword = searchParams.get('q') || ''
 
   const bookmarks = await prisma.bookmarks.findMany({
     where: {
@@ -29,6 +30,31 @@ export async function GET(request: NextRequest) {
       accounts: {
         deleted_at: null,
       },
+      OR: [
+        {
+          url: {
+            contains: keyword,
+            mode: 'insensitive',
+          },
+        },
+        {
+          title: {
+            contains: keyword,
+            mode: 'insensitive',
+          },
+        },
+        {
+          summary: {
+            contains: keyword,
+            mode: 'insensitive',
+          },
+        },
+        {
+          keywords: {
+            hasSome: [keyword],
+          },
+        },
+      ],
     },
     /* include: {
       teams: true,
@@ -69,6 +95,31 @@ export async function GET(request: NextRequest) {
       accounts: {
         deleted_at: null,
       },
+      OR: [
+        {
+          url: {
+            contains: keyword,
+            mode: 'insensitive',
+          },
+        },
+        {
+          title: {
+            contains: keyword,
+            mode: 'insensitive',
+          },
+        },
+        {
+          summary: {
+            contains: keyword,
+            mode: 'insensitive',
+          },
+        },
+        {
+          keywords: {
+            hasSome: [keyword],
+          },
+        },
+      ],
     },
   })
 
