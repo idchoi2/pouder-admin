@@ -2,11 +2,11 @@
   "crons": [
     {
       "path": "/api/cron/bookmarks/chunks",
-      "schedule": "*/3 * * * *"
+      "schedule": "*/5 * * * *"
     },
     {
       "path": "/api/cron/bookmarks/keywords",
-      "schedule": "*/3 * * * *"
+      "schedule": "*/5 * * * *"
     }
   ]
 }
