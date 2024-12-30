@@ -22,10 +22,17 @@ export interface AccountInterface {
   location: string | null
   preferred_language: LanguageType | null
   teams?: teams[]
+  users?: User
 }
 
 export interface TeamAccountRoles extends team_account_roles {
   teams?: teams
+  accounts?: AccountInterface
+}
+
+export interface TeamsInterface extends teams {
+  accounts?: AccountInterface
+  team_account_roles?: TeamAccountRoles[]
 }
 
 export interface UserInterface extends accounts {

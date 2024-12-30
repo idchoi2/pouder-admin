@@ -23,7 +23,7 @@ function SidebarMenus() {
           size={'sm'}
           asChild
           className="w-full block justify-start">
-          <Link href="/" className="flex  items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2">
             <Home size={16} />
             <span>Home</span>
           </Link>
@@ -35,7 +35,7 @@ function SidebarMenus() {
           size={'sm'}
           asChild
           className="w-full block justify-start">
-          <Link href="/bookmarks" className="flex  items-center space-x-2">
+          <Link href="/bookmarks" className="flex items-center space-x-2">
             <Bookmark size={16} />
             <span>Bookmarks</span>
           </Link>
@@ -43,11 +43,10 @@ function SidebarMenus() {
       </li>
       <li>
         <Button
-          variant={'ghost'}
+          variant={pathname.startsWith('/teams') ? 'default' : 'ghost'}
           size={'sm'}
-          disabled
           className="w-full block justify-start">
-          <Link href="/teams" className="flex  items-center space-x-2">
+          <Link href="/teams" className="flex items-center space-x-2">
             <Users size={16} />
             <span>Teams</span>
           </Link>
@@ -59,7 +58,7 @@ function SidebarMenus() {
           size={'sm'}
           asChild
           className="w-full block justify-start">
-          <Link href="/users" className="flex  items-center space-x-2">
+          <Link href="/users" className="flex items-center space-x-2">
             <User size={16} />
             <span>Users</span>
           </Link>
@@ -73,9 +72,7 @@ function SidebarMenus() {
           size={'sm'}
           asChild
           className="w-full block justify-start">
-          <Link
-            href="/searchHistories"
-            className="flex  items-center space-x-2">
+          <Link href="/searchHistories" className="flex items-center space-x-2">
             <Search size={16} />
             <span>Search Histories</span>
           </Link>
@@ -87,7 +84,7 @@ function SidebarMenus() {
           size={'sm'}
           asChild
           className="w-full block justify-start">
-          <Link href="/feedbacks" className="flex  items-center space-x-2">
+          <Link href="/feedbacks" className="flex items-center space-x-2">
             <MessageSquare size={16} />
             <span>Feedbacks</span>
           </Link>

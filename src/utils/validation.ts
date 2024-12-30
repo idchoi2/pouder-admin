@@ -1,6 +1,5 @@
 import prisma from '@/app/prisma'
 import { AxiosErrorInterface, TeamUserRoleType } from '@/types'
-import { accounts } from '@prisma/client'
 import { User } from '@supabase/supabase-js'
 import { z } from 'zod'
 /**
@@ -103,38 +102,14 @@ export const checkUser = async (userId: number) => {
  */
 export const checkTeam = async (
   teamId: string,
-  account: accounts | null,
   allowedRoles?: TeamUserRoleType[]
 ) => {
-  if (!account) return null
-
-  const team =
-    allowedRoles && allowedRoles.length > 0
-      ? await prisma.teams.findFirst({
-          where: {
-            id: teamId,
-            deleted_at: null,
-            team_account_roles: {
-              some: {
-                OR: allowedRoles.map((role) => ({
-                  account_id: account.id,
-                  user_role_type: role,
-                })),
-              },
-            },
-          },
-        })
-      : await prisma.teams.findFirst({
-          where: {
-            id: teamId,
-            deleted_at: null,
-            team_account_roles: {
-              some: {
-                account_id: account.id,
-              },
-            },
-          },
-        })
+  const team = await prisma.teams.findFirst({
+    where: {
+      id: teamId,
+      deleted_at: null,
+    },
+  })
 
   return team
 }

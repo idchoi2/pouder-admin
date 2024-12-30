@@ -91,7 +91,7 @@ function FeedbacksList() {
    * @param size
    */
   const onHandleChangePagination = (page: number, size: number) => {
-    router.push(`/sites?page=${page}`)
+    router.push(`/feedbacks?page=${page}`)
   }
 
   return (
