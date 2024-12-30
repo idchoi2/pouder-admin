@@ -1,7 +1,10 @@
 import prisma from '@/app/prisma'
 import { registry } from '@/app/registry'
 import { AI_COMMAND_OPTIONS } from '@/configs'
-import { BOOKMARK_CRON_SIZE } from '@/configs/bookmark.config'
+import {
+  BOOKMARK_CRON_SIZE,
+  BROKEN_BOOKMARK_IDS,
+} from '@/configs/bookmark.config'
 import { showErrorJsonResponse } from '@/lib/utils'
 import { getBookmarkData, requestUrl } from '@/utils/bookmark'
 import { CoreMessage, generateObject, generateText } from 'ai'
@@ -17,7 +20,7 @@ export async function GET(request: NextRequest) {
   if (
     request.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`
   ) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   const bookmarks = await prisma.bookmarks.findMany({
@@ -40,6 +43,12 @@ export async function GET(request: NextRequest) {
           },
         },
       ],
+      // Exclude broken bookmarks
+      NOT: {
+        id: {
+          in: BROKEN_BOOKMARK_IDS,
+        },
+      },
     },
     select: {
       id: true,
@@ -54,7 +63,7 @@ export async function GET(request: NextRequest) {
     },
     orderBy: [
       {
-        created_at: 'desc',
+        created_at: 'asc',
       },
     ],
     take: BOOKMARK_CRON_SIZE,
@@ -73,6 +82,7 @@ export async function GET(request: NextRequest) {
   }
 
   const promises = bookmarks.map(async (bookmark) => {
+    console.log(bookmark.url)
     const htmlContents = await requestUrl(bookmark.url as string)
 
     // Get bookmark data

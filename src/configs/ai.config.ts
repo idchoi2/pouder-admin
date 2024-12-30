@@ -98,7 +98,7 @@ export const AI_COMMAND_OPTIONS: AiCommandOptionInterface[] = [
     provider: 'anthropic',
     model: 'claude-3-5-haiku-20241022',
     prompts: [PROMPT_GET_KEYWORDS],
-    temperature: 1,
+    temperature: 0.1,
   },
   {
     command: 'get_keywords_from_ask',
