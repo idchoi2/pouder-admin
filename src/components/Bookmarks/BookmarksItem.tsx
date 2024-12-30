@@ -151,7 +151,7 @@ export default function BookmarkItem({
                   )}
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="tags">
+              {/* <AccordionItem value="tags">
                 <AccordionTrigger>
                   Tags ({bookmark.tags?.length})
                 </AccordionTrigger>
@@ -168,7 +168,7 @@ export default function BookmarkItem({
                     </div>
                   )}
                 </AccordionContent>
-              </AccordionItem>
+              </AccordionItem> */}
             </Accordion>
           )}
         </div>
