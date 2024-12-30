@@ -1,7 +1,6 @@
 import prisma from '@/app/prisma'
 import { registry } from '@/app/registry'
 import { AI_COMMAND_OPTIONS, BOOKMARK_CRON_SIZE } from '@/configs'
-import { BODY_TEXT_CHUNKS_SIZE } from '@/configs/bookmark.config'
 import { BookmarkChunksContentsInterface } from '@/types'
 import { createClient } from '@/utils/supabase/server'
 import { Bookmark_Chunk_Type } from '@prisma/client'
@@ -74,20 +73,6 @@ export async function GET(request: NextRequest) {
         bookmark_id: bookmark.id,
       },
     })
-
-    // Get bookmark data
-    let bodyContentsChunks: BookmarkChunksContentsInterface[] = []
-
-    if (bodyContents) {
-      const bodyWords = bodyContents.split(' ')
-
-      for (let i = 0; i < bodyWords.length; i += BODY_TEXT_CHUNKS_SIZE) {
-        bodyContentsChunks.push({
-          type: 'BODY',
-          content: bodyWords.slice(i, i + BODY_TEXT_CHUNKS_SIZE).join(' '),
-        })
-      }
-    }
 
     // Create bookmark chunks
     const bodyChunks: BookmarkChunksContentsInterface[] = [
