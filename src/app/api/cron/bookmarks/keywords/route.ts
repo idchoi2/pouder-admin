@@ -27,9 +27,19 @@ export async function GET(request: NextRequest) {
         deleted_at: null,
       },
       body_contents: null,
-      keywords: {
-        isEmpty: true,
-      },
+      // Keywords is empty or null
+      OR: [
+        {
+          keywords: {
+            equals: null,
+          },
+        },
+        {
+          keywords: {
+            equals: [],
+          },
+        },
+      ],
     },
     select: {
       id: true,
@@ -41,7 +51,6 @@ export async function GET(request: NextRequest) {
       summary: true,
       tags: true,
       created_at: true,
-      updated_at: true,
     },
     orderBy: [
       {
