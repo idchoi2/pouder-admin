@@ -26,6 +26,9 @@ export async function GET(request: NextRequest) {
       accounts: {
         deleted_at: null,
       },
+      keywords: {
+        isEmpty: false,
+      },
       bookmark_chunks: {
         none: {
           deleted_at: null,
