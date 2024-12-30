@@ -168,6 +168,13 @@ export async function GET(request: NextRequest) {
         summary: bookmark.summary || summarizedText,
       },
     })
+
+    // Remove previous chunks
+    await prisma.bookmark_chunks.deleteMany({
+      where: {
+        bookmark_id: bookmark.id,
+      },
+    })
   })
 
   await Promise.all(promises)
