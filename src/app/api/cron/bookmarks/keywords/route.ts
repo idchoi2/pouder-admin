@@ -174,6 +174,7 @@ export async function GET(request: NextRequest) {
         keywords,
         body_contents: bookmarkData.bodyText,
         summary: bookmark.summary || summarizedText,
+        updated_at: new Date(),
       },
     })
 

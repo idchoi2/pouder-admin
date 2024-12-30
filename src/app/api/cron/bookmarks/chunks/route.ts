@@ -65,7 +65,6 @@ export async function GET(request: NextRequest) {
   const promises = bookmarks.map(async (bookmark) => {
     console.log(bookmark.url)
     const keywords = bookmark.keywords || []
-    const tags = bookmark.tags || []
     const bodyContents = bookmark.body_contents
 
     // Remove previous chunks
@@ -104,10 +103,6 @@ export async function GET(request: NextRequest) {
         content: bookmark.bookmark_field || '',
       },
       ...bodyContentsChunks,
-      ...tags.map((term) => ({
-        type: 'TAGS' as Bookmark_Chunk_Type,
-        content: term,
-      })),
       ...keywords.map((term) => ({
         type: 'KEYWORDS' as Bookmark_Chunk_Type,
         content: term,
@@ -138,6 +133,14 @@ export async function GET(request: NextRequest) {
         }))
       )
     }
+
+    // Update bookmark
+    await prisma.bookmarks.update({
+      where: { id: bookmark.id },
+      data: {
+        updated_at: new Date(),
+      },
+    })
   })
 
   await Promise.all(promises)
