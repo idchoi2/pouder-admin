@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 /**
  * Recalculate bookmark fields of team
  */
-export async function GET(
+export async function PUT(
   request: NextRequest,
   { params }: { params: { teamId: string } }
 ) {
@@ -27,15 +27,58 @@ export async function GET(
   }
 
   // Recalculate bookmark fields
-  const bookmarks = await prisma.bookmarks.findMany({
+  const teamBookmarks = await prisma.bookmarks.findMany({
     where: {
       team_id: params.teamId,
       deleted_at: null,
     },
     select: {
+      id: true,
       bookmark_field: true,
+      website_field: true,
     },
   })
 
-  return NextResponse.json(bookmarks)
+  teamBookmarks.forEach(async (bookmark) => {
+    // Bookmark field is empty, but website field is not empty
+    /* if (!bookmark.bookmark_field && bookmark.website_field) {
+      await prisma.bookmarks.update({
+        where: {
+          id: bookmark.id,
+        },
+        data: {
+          bookmark_field: bookmark.website_field,
+        },
+      })
+    } */
+  })
+
+  // Re-calculate team_bookmark_fields's quantity
+  await prisma.team_bookmark_fields.deleteMany({
+    where: {
+      team_id: params.teamId,
+    },
+  })
+
+  const teamBookmarkFieldsSet = new Set()
+
+  teamBookmarks.forEach((bookmark) => {
+    teamBookmarkFieldsSet.add(bookmark.bookmark_field)
+  })
+
+  const teamBookmarkFieldsArray = Array.from(teamBookmarkFieldsSet)
+
+  teamBookmarkFieldsArray.forEach(async (bookmarkField: any) => {
+    await prisma.team_bookmark_fields.create({
+      data: {
+        team_id: params.teamId,
+        bookmark_field: bookmarkField,
+        quantity: teamBookmarks.filter(
+          (bookmark) => bookmark.bookmark_field === bookmarkField
+        ).length,
+      },
+    })
+  })
+
+  return NextResponse.json(teamBookmarks)
 }

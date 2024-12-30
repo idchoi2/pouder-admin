@@ -1,16 +1,19 @@
 'use client'
 
+import { recalculateTeamsBookmarkFields } from '@/api/teams.api'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { SITE_LIST_SIZE } from '@/configs/site.config'
 import { useTeamsList } from '@/hooks/teams.hook'
 import { teamsListParamsAtom } from '@/states'
 import { TeamsInterface } from '@/types/database.types'
 import { Pagination, Table } from 'antd'
+import { Loader } from 'lucide-react'
 import moment from 'moment'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { Badge } from '../ui/badge'
+import { Button } from '../ui/button'
 import { useToast } from '../ui/use-toast'
 
 function TeamsList() {
@@ -26,6 +29,11 @@ function TeamsList() {
   // Hooks
   const { data: teamsList, isFetching } = useTeamsList(teamsListParams)
 
+  // State
+  const [loading, setLoading] = useState<boolean>(false)
+  const [loadingTeamId, setLoadingTeamId] = useState<string>('')
+
+  // Effect
   useEffect(() => {
     setTeamsListParams({
       ...teamsListParams,
@@ -97,6 +105,27 @@ function TeamsList() {
       width: 100,
     },
     {
+      title: '카테고리',
+      key: 'categories',
+      render: (team: TeamsInterface) => (
+        <div>
+          <Button
+            size={'sm'}
+            variant={'secondary'}
+            disabled={loading}
+            onClick={() => onHandleRecalculateBookmarkFieldsCount(team)}>
+            {loading && loadingTeamId === team.id ? (
+              <Loader size={16} className="mr-2 animate-spin" />
+            ) : (
+              <></>
+            )}
+            카테고리 갯수 재계산
+          </Button>
+        </div>
+      ),
+      width: 100,
+    },
+    {
       title: '등록날짜',
       key: 'created_at',
       render: (team: TeamsInterface) => (
@@ -107,6 +136,34 @@ function TeamsList() {
       width: 100,
     },
   ]
+
+  /**
+   * 카테고리 갯수 재계산
+   * @param team
+   */
+  const onHandleRecalculateBookmarkFieldsCount = async (
+    team: TeamsInterface
+  ) => {
+    if (loading) return
+
+    if (confirm('카테고리 갯수를 재계산 하시겠습니까?')) {
+      try {
+        await setLoading(true)
+        await setLoadingTeamId(team.id)
+        await recalculateTeamsBookmarkFields(team.id)
+        await setLoading(false)
+        await setLoadingTeamId('')
+
+        toast({
+          title: 'Complete',
+          description: '카테고리 갯수를 재계산 하였습니다.',
+        })
+      } catch (error) {
+        await setLoading(false)
+        await setLoadingTeamId('')
+      }
+    }
+  }
 
   /**
    * 페이지네이션 변경
