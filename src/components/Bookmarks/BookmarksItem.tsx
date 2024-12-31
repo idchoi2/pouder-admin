@@ -80,7 +80,7 @@ export default function BookmarkItem({
           {bookmark.title || bookmark.url}
         </Typography>
         <Typography variant="muted" className="truncate">
-          {decodeURIComponent(bookmark.url || '')}
+          {decodeURIComponent(encodeURIComponent(bookmark.url || ''))}
         </Typography>
         <div className="w-full min-h-[30px] pt-1 flex flex-wrap space-x-1.5">
           {!!bookmark.bookmark_field &&
