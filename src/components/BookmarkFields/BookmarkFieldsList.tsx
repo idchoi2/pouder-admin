@@ -1,6 +1,6 @@
 'use client'
 
-import { useBookmarkFieldsList } from '@/hooks'
+import { useBookmarkFieldsFromEdgeConfig, useBookmarkFieldsList } from '@/hooks'
 import { feedbacksListParamsAtom } from '@/states/atoms/feedbacks.atoms'
 import { BookmarkFieldsInterface } from '@/types/database.types'
 import { Table } from 'antd'
@@ -25,6 +25,8 @@ function BookmarkFieldsList() {
 
   // Hooks
   const { data: bookmarkFieldsList, isFetching } = useBookmarkFieldsList()
+  const { data: bookmarkFieldsListFromEdgeConfig } =
+    useBookmarkFieldsFromEdgeConfig()
 
   useEffect(() => {
     setFeedbacksListParams({
@@ -69,6 +71,23 @@ function BookmarkFieldsList() {
       render: (bookmarkField: BookmarkFieldsInterface) => (
         <div>{bookmarkField.emoji}</div>
       ),
+      width: 100,
+    },
+    {
+      title: '사용여부',
+      key: 'active',
+      render: (bookmarkField: BookmarkFieldsInterface) => (
+        <div>
+          {!bookmarkField.disabled &&
+          bookmarkFieldsListFromEdgeConfig?.find(
+            (ec) => ec.label === bookmarkField.label
+          ) ? (
+            <Badge>사용 가능</Badge>
+          ) : (
+            <></>
+          )}
+        </div>
+      ),
       width: 200,
     },
     {
@@ -79,6 +98,7 @@ function BookmarkFieldsList() {
       ),
       width: 200,
     },
+
     {
       title: '등록날짜',
       key: 'created_at',

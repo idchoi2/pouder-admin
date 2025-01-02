@@ -9,6 +9,16 @@ export const getBookmarkFields = () => {
 }
 
 /**
+ * 북마크 필드 목록 조회
+ * @returns
+ */
+export const getBookmarkFieldsFromEdgeConbfig = () => {
+  return axiosInstance
+    .get(`/api/bookmark_fields_from_edge_config`)
+    .then((res) => res.data)
+}
+
+/**
  * 북마크 필드 병합
  * @param selectedField
  * @param targetField
