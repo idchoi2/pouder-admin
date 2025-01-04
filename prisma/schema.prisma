@@ -742,6 +742,7 @@ model feedbacks {
   account_id BigInt?
   contents   String?
   userAgent  Json?     @db.Json
+  answer     String?
   accounts   accounts? @relation(fields: [account_id], references: [id], onUpdate: NoAction)
   teams      teams?    @relation(fields: [team_id], references: [id], onUpdate: NoAction)
 

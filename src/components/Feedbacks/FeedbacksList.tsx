@@ -11,6 +11,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { useToast } from '../ui/use-toast'
+import FeedbackAnswerForm from './FeedbackAnswerForm'
 
 function FeedbacksList() {
   const router = useRouter()
@@ -52,7 +53,10 @@ function FeedbacksList() {
                 />
                 <AvatarFallback>{feedback.accounts.name}</AvatarFallback>
               </Avatar>
-              <div>{feedback.accounts.name}</div>
+              <div className="space-y-0.5 text-xs">
+                <div className="font-bold">{feedback.accounts.name}</div>
+                <div>{feedback.accounts.users?.email}</div>
+              </div>
             </>
           )}
         </div>
@@ -71,7 +75,23 @@ function FeedbacksList() {
           }}
         />
       ),
-      width: '40%',
+      width: '30%',
+    },
+    {
+      title: '답변',
+      key: 'answer',
+      render: (feedback: FeedbacksInterface) => (
+        <FeedbackAnswerForm feedback={feedback} />
+      ),
+      width: '30%',
+    },
+    {
+      title: '접속 정보',
+      key: 'userAgent',
+      render: (feedback: FeedbacksInterface) => (
+        <div className="text-xs">{JSON.stringify(feedback.userAgent)}</div>
+      ),
+      width: 100,
     },
     {
       title: '등록날짜',

@@ -28,7 +28,18 @@ export async function GET(request: NextRequest) {
       deleted_at: null,
     },
     include: {
-      accounts: true,
+      accounts: {
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+          users: {
+            select: {
+              email: true,
+            },
+          },
+        },
+      },
     },
     orderBy: [
       {

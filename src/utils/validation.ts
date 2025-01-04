@@ -123,6 +123,7 @@ export const checkBookmark = async (bookmarkId: string) => {
   const bookmark = await prisma.bookmarks.findFirst({
     where: {
       id: bookmarkId,
+      deleted_at: null,
     },
   })
 
@@ -140,8 +141,25 @@ export const checkChat = async (chatId: string, teamId: string) => {
     where: {
       id: chatId,
       team_id: teamId,
+      deleted_at: null,
     },
   })
 
   return chat
+}
+
+/**
+ * Check if the feedback exists
+ * @param feedbackId
+ * @returns
+ */
+export const checkFeedback = async (feedbackId: number) => {
+  const feedback = await prisma.feedbacks.findFirst({
+    where: {
+      id: feedbackId,
+      deleted_at: null,
+    },
+  })
+
+  return feedback
 }

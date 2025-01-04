@@ -14,3 +14,13 @@ export const getFeedbacks = (
     )
     .then((res) => res.data)
 }
+
+/**
+ * 피드백 답변 수정
+ * @returns
+ */
+export const updateFeedbackAnswer = (feedbackId: number, answer: string) => {
+  return axiosInstance
+    .put(`/api/feedbacks/${feedbackId}`, { answer })
+    .then((res) => res.data)
+}
