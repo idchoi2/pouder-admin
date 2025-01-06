@@ -1,6 +1,8 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { USER_LIST_SIZE } from '@/configs/user.config'
 import {
   useSendBetaApprovalEmail,
@@ -10,10 +12,10 @@ import {
 import { usersListParamsAtom } from '@/states'
 import { UserInterface } from '@/types'
 import { Pagination, Table } from 'antd'
-import { Check } from 'lucide-react'
+import { Check, Search } from 'lucide-react'
 import moment from 'moment'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { Badge } from '../ui/badge'
 import Typography from '../ui/typography'
@@ -28,6 +30,9 @@ function UsersList() {
   // List Search Params
   const [usersListParams, setUsersListParams] =
     useRecoilState(usersListParamsAtom)
+
+  // State
+  const [keyword, setKeyword] = useState<string>('')
 
   // Hooks
   const { data: usersList, isFetching } = useUsersList(usersListParams)
@@ -190,28 +195,31 @@ function UsersList() {
     router.push(`/users?page=${page}`)
   }
 
-  const onHandleToggleBetaUser = (checked: boolean, userId: number) => {
-    toast({
-      title: 'Approving',
-      description: '승인중입니다.',
-    })
+  /**
+   * 검색
+   * @param e
+   */
+  const onHandleSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-    toggleBetaUser(userId)
-  }
-
-  const onHandleSendBetaApprovalEmail = (userId: number) => {
-    if (confirm('승인 메일을 발송하시겠습니까?')) {
-      toast({
-        title: 'Sending',
-        description: '승인 메일을 발송중입니다.',
-      })
-
-      sendBetaApprovalEmail(userId)
-    }
+    router.push(`/users?page=1&q=${keyword}`)
   }
 
   return (
-    <div>
+    <div className="space-y-4">
+      {/* 검색 필터: 시작 */}
+      <form onSubmit={onHandleSearch} className="relative">
+        <Input
+          value={keyword}
+          placeholder="검색어를 입력하세요"
+          onChange={(e) => setKeyword(e.target.value)}
+          className="pr-10"
+        />
+        <Button type="submit" size={'icon'} className="absolute top-0 right-0">
+          <Search size={20} />
+        </Button>
+      </form>
+      {/* 검색 필터: 끝 */}
       {/* Table: 시작 */}
       <Table
         columns={tableCols}

@@ -2,15 +2,17 @@
 
 import { recalculateTeamsBookmarkFields } from '@/api/teams.api'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Input } from '@/components/ui/input'
 import { SITE_LIST_SIZE } from '@/configs/site.config'
 import { useTeamsList } from '@/hooks/teams.hook'
 import { teamsListParamsAtom } from '@/states'
 import { TeamsInterface } from '@/types/database.types'
+import { Team_Plan } from '@prisma/client'
 import { Pagination, Table } from 'antd'
-import { Loader } from 'lucide-react'
+import { Loader, Search } from 'lucide-react'
 import moment from 'moment'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
@@ -32,6 +34,7 @@ function TeamsList() {
   // State
   const [loading, setLoading] = useState<boolean>(false)
   const [loadingTeamId, setLoadingTeamId] = useState<string>('')
+  const [keyword, setKeyword] = useState<string>('')
 
   // Effect
   useEffect(() => {
@@ -40,7 +43,14 @@ function TeamsList() {
       page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
       sort: searchParams.get('sort') || '',
       q: searchParams.get('q') || '',
+      plan:
+        searchParams.get('plan') &&
+        Object.values(Team_Plan).includes(searchParams.get('plan') as Team_Plan)
+          ? (searchParams.get('plan') as Team_Plan)
+          : '',
     })
+
+    setKeyword(searchParams.get('q') || '')
   }, [searchParams])
 
   // Table columns
@@ -174,8 +184,31 @@ function TeamsList() {
     router.push(`/teams?page=${page}`)
   }
 
+  /**
+   * 검색
+   * @param e
+   */
+  const onHandleSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    router.push(`/teams?page=1&q=${keyword}`)
+  }
+
   return (
-    <div>
+    <div className="space-y-4">
+      {/* 검색 필터: 시작 */}
+      <form onSubmit={onHandleSearch} className="relative">
+        <Input
+          value={keyword}
+          placeholder="검색어를 입력하세요"
+          onChange={(e) => setKeyword(e.target.value)}
+          className="pr-10"
+        />
+        <Button type="submit" size={'icon'} className="absolute top-0 right-0">
+          <Search size={20} />
+        </Button>
+      </form>
+      {/* 검색 필터: 끝 */}
       {/* Table: 시작 */}
       <Table
         columns={tableCols}

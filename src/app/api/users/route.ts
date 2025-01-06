@@ -22,10 +22,31 @@ export async function GET(request: NextRequest) {
   // Get params
   const searchParams = request.nextUrl.searchParams
   const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1
+  const keyword = searchParams.get('q') || ''
 
   const users = await prisma.accounts.findMany({
     where: {
       deleted_at: null,
+      AND: [
+        {
+          OR: [
+            {
+              users: {
+                email: {
+                  contains: keyword,
+                  mode: 'insensitive',
+                },
+              },
+            },
+            {
+              name: {
+                contains: keyword,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        },
+      ],
     },
     include: {
       users: true,
@@ -47,6 +68,26 @@ export async function GET(request: NextRequest) {
   const allUsersCount = await prisma.accounts.count({
     where: {
       deleted_at: null,
+      AND: [
+        {
+          OR: [
+            {
+              users: {
+                email: {
+                  contains: keyword,
+                  mode: 'insensitive',
+                },
+              },
+            },
+            {
+              name: {
+                contains: keyword,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        },
+      ],
     },
   })
 

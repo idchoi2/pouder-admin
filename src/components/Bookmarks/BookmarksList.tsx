@@ -148,6 +148,10 @@ function BookmarksList() {
     router.push(`/bookmarks?page=${page}`)
   }
 
+  /**
+   * 검색
+   * @param e
+   */
   const onHandleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -160,6 +164,7 @@ function BookmarksList() {
       <form onSubmit={onHandleSearch} className="relative">
         <Input
           value={keyword}
+          placeholder="검색어를 입력하세요"
           onChange={(e) => setKeyword(e.target.value)}
           className="pr-10"
         />

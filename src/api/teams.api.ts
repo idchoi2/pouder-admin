@@ -7,7 +7,9 @@ import { TeamsListSearchParamsInterface } from '@/types/teams.types'
  */
 export const getTeams = (params: TeamsListSearchParamsInterface | null) => {
   return axiosInstance
-    .get(`/api/teams?page=${params?.page}&sort=${params?.sort}&q=${params?.q}`)
+    .get(
+      `/api/teams?page=${params?.page}&sort=${params?.sort}&q=${params?.q}&plan=${params?.plan}`
+    )
     .then((res) => res.data)
 }
 

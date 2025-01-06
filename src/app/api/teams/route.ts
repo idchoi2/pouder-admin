@@ -3,6 +3,7 @@ import { TEAM_LIST_SIZE } from '@/configs'
 import { showErrorJsonResponse } from '@/lib/utils'
 import { getMe } from '@/utils/auth'
 import { checkAccount } from '@/utils/validation'
+import { Team_Plan } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
@@ -22,6 +23,12 @@ export async function GET(request: NextRequest) {
   // Get params
   const searchParams = request.nextUrl.searchParams
   const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1
+  const keyword = searchParams.get('q') || ''
+  const plan =
+    searchParams.get('plan') &&
+    Object.values(Team_Plan).includes(searchParams.get('plan') as Team_Plan)
+      ? (searchParams.get('plan') as Team_Plan)
+      : null
 
   const teams = await prisma.teams.findMany({
     where: {
@@ -29,6 +36,19 @@ export async function GET(request: NextRequest) {
       accounts: {
         deleted_at: null,
       },
+      AND: [
+        {
+          name: {
+            contains: keyword,
+            mode: 'insensitive',
+          },
+        },
+        plan
+          ? {
+              plan,
+            }
+          : {},
+      ],
     },
     select: {
       id: true,
@@ -65,6 +85,19 @@ export async function GET(request: NextRequest) {
       accounts: {
         deleted_at: null,
       },
+      AND: [
+        {
+          name: {
+            contains: keyword,
+            mode: 'insensitive',
+          },
+        },
+        plan
+          ? {
+              plan,
+            }
+          : {},
+      ],
     },
   })
 
