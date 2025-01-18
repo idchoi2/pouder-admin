@@ -321,6 +321,7 @@ model users {
   one_time_tokens             one_time_tokens[]
   sessions                    sessions[]
   accounts                    accounts[]
+  team_invites                team_invites[]
 
   @@index([instance_id])
   @@index([is_anonymous])
@@ -418,30 +419,32 @@ model s3_multipart_uploads_parts {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model accounts {
-  id                  BigInt               @id @default(autoincrement())
-  created_at          DateTime             @default(now()) @db.Timestamptz(6)
-  user_id             String?              @db.Uuid
-  bio                 String?
-  location            String?
-  survey              Json?                @db.Json
-  preferred_language  Supported_Language?  @default(ENGLISH)
-  avatar              String?
-  deleted_at          DateTime?            @db.Timestamptz(6)
-  name                String
-  is_email_newsLetter Boolean?
-  is_admin            Boolean              @default(false)
-  is_approved         Boolean?             @default(false)
-  is_sent             Boolean?             @default(false)
-  contact_id          String?
-  users               users?               @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  bookmarks           bookmarks[]
-  chat_conversations  chat_conversations[]
-  chats               chats[]
-  feedbacks           feedbacks[]
-  folders             folders[]
-  team_account_roles  team_account_roles[]
-  teams               teams[]
-  token_usages        token_usages[]
+  id                                                  BigInt               @id @default(autoincrement())
+  created_at                                          DateTime             @default(now()) @db.Timestamptz(6)
+  user_id                                             String?              @db.Uuid
+  bio                                                 String?
+  location                                            String?
+  survey                                              Json?                @db.Json
+  preferred_language                                  Supported_Language?  @default(ENGLISH)
+  avatar                                              String?
+  deleted_at                                          DateTime?            @db.Timestamptz(6)
+  name                                                String
+  is_email_newsLetter                                 Boolean?
+  is_admin                                            Boolean              @default(false)
+  is_approved                                         Boolean?             @default(false)
+  is_sent                                             Boolean?             @default(false)
+  contact_id                                          String?
+  users                                               users?               @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  bookmarks                                           bookmarks[]
+  chat_conversations                                  chat_conversations[]
+  chats                                               chats[]
+  feedbacks                                           feedbacks[]
+  folders                                             folders[]
+  team_account_roles                                  team_account_roles[]
+  team_invites_team_invites_account_idToaccounts      team_invites[]       @relation("team_invites_account_idToaccounts")
+  team_invites_team_invites_host_account_idToaccounts team_invites[]       @relation("team_invites_host_account_idToaccounts")
+  teams                                               teams[]
+  token_usages                                        token_usages[]
 
   @@schema("public")
 }
@@ -457,6 +460,7 @@ model teams {
   icon                 String?
   plan                 Team_Plan              @default(FREE)
   account_id           BigInt?
+  count_bookmarks      Int                    @default(0)
   bookmark_chunks      bookmark_chunks[]
   bookmarks            bookmarks[]
   chat_conversations   chat_conversations[]
@@ -465,7 +469,9 @@ model teams {
   folders              folders[]
   team_account_roles   team_account_roles[]
   team_bookmark_fields team_bookmark_fields[]
+  team_invites         team_invites[]
   team_tags            team_tags[]
+  team_usages_daily    team_usages_daily[]
   team_website_fields  team_website_fields[]
   team_website_types   team_website_types[]
   accounts             accounts?              @relation(fields: [account_id], references: [id], onUpdate: NoAction)
@@ -477,13 +483,13 @@ model teams {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model bookmark_chunks {
   id          BigInt                 @id @default(autoincrement())
-  created_at  DateTime               @default(now()) @db.Timestamptz(6)
   bookmark_id String?                @db.Uuid
   content     String?
   team_id     String?                @db.Uuid
   chunk_type  Bookmark_Chunk_Type?
-  deleted_at  DateTime?              @db.Timestamptz(6)
   embedding   Unsupported("vector")?
+  created_at  DateTime?              @default(now()) @db.Timestamptz(6)
+  deleted_at  DateTime?              @db.Timestamptz(6)
   bookmarks   bookmarks?             @relation(fields: [bookmark_id], references: [id], onUpdate: NoAction)
   teams       teams?                 @relation(fields: [team_id], references: [id], onUpdate: NoAction)
 
@@ -749,6 +755,38 @@ model feedbacks {
   @@schema("public")
 }
 
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model team_invites {
+  id                                              BigInt          @id @default(autoincrement())
+  created_at                                      DateTime        @default(now()) @db.Timestamptz(6)
+  expired_at                                      DateTime?       @db.Timestamptz(6)
+  account_id                                      BigInt?
+  user_id                                         String?         @db.Uuid
+  email                                           String?
+  token                                           String?
+  role                                            Team_User_Role?
+  team_id                                         String?         @db.Uuid
+  host_account_id                                 BigInt?
+  accounts_team_invites_account_idToaccounts      accounts?       @relation("team_invites_account_idToaccounts", fields: [account_id], references: [id], onUpdate: NoAction)
+  accounts_team_invites_host_account_idToaccounts accounts?       @relation("team_invites_host_account_idToaccounts", fields: [host_account_id], references: [id], onUpdate: NoAction)
+  teams                                           teams?          @relation(fields: [team_id], references: [id], onUpdate: NoAction)
+  users                                           users?          @relation(fields: [user_id], references: [id], onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model team_usages_daily {
+  id              BigInt   @id @default(autoincrement())
+  team_id         String?  @db.Uuid
+  tracked_date    DateTime @db.Date
+  count_bookmarks Int      @default(0)
+  count_rags      Int      @default(0)
+  teams           teams?   @relation(fields: [team_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
 enum aal_level {
   aal1
   aal2
@@ -800,6 +838,7 @@ enum Supported_Language {
 
 enum Team_Plan {
   FREE
+  BASIC
   PRO
 
   @@map("Team Plan")

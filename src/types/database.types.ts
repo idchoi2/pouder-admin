@@ -33,6 +33,9 @@ export interface TeamAccountRoles extends team_account_roles {
 export interface TeamsInterface extends teams {
   accounts?: AccountInterface
   team_account_roles?: TeamAccountRoles[]
+  _count?: {
+    bookmarks: number
+  }
 }
 
 export interface UserInterface extends accounts {

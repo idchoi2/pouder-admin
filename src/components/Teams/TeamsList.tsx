@@ -115,6 +115,14 @@ function TeamsList() {
       width: 100,
     },
     {
+      title: '북마크 수',
+      key: 'bookmarkCount',
+      render: (team: TeamsInterface) => (
+        <Badge>{team._count?.bookmarks.toLocaleString()}</Badge>
+      ),
+      width: 100,
+    },
+    {
       title: '카테고리',
       key: 'categories',
       render: (team: TeamsInterface) => (
