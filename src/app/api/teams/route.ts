@@ -69,15 +69,7 @@ export async function GET(request: NextRequest) {
           },
         },
       },
-      _count: {
-        select: {
-          bookmarks: {
-            where: {
-              deleted_at: null,
-            },
-          },
-        },
-      },
+      count_bookmarks: true,
     },
     orderBy: [
       {

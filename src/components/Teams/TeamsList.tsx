@@ -9,7 +9,7 @@ import { teamsListParamsAtom } from '@/states'
 import { TeamsInterface } from '@/types/database.types'
 import { Team_Plan } from '@prisma/client'
 import { Pagination, Table } from 'antd'
-import { Loader, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
 import moment from 'moment'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { FormEvent, useEffect, useState } from 'react'
@@ -118,11 +118,11 @@ function TeamsList() {
       title: '북마크 수',
       key: 'bookmarkCount',
       render: (team: TeamsInterface) => (
-        <Badge>{team._count?.bookmarks.toLocaleString()}</Badge>
+        <Badge>{team.count_bookmarks.toLocaleString()}</Badge>
       ),
       width: 100,
     },
-    {
+    /* {
       title: '카테고리',
       key: 'categories',
       render: (team: TeamsInterface) => (
@@ -142,7 +142,7 @@ function TeamsList() {
         </div>
       ),
       width: 100,
-    },
+    }, */
     {
       title: '등록날짜',
       key: 'created_at',

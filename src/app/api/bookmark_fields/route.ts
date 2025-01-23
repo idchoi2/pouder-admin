@@ -25,7 +25,11 @@ export async function GET(request: NextRequest) {
     include: {
       _count: {
         select: {
-          bookmarks: true,
+          bookmarks: {
+            where: {
+              deleted_at: null,
+            },
+          },
         },
       },
     },
