@@ -6,7 +6,7 @@ export interface TeamsListSearchParamsInterface {
   page: number
   sort: string
   q: string
-  plan: Team_Plan | ''
+  plan: Team_Plan | 'all'
 }
 
 export interface TeamsListSearchInterface {

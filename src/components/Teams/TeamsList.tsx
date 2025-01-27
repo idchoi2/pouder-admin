@@ -3,6 +3,14 @@
 import { recalculateTeamsBookmarkFields } from '@/api/teams.api'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { SITE_LIST_SIZE } from '@/configs/site.config'
 import { useTeamsList } from '@/hooks/teams.hook'
 import { teamsListParamsAtom } from '@/states'
@@ -35,9 +43,16 @@ function TeamsList() {
   const [loading, setLoading] = useState<boolean>(false)
   const [loadingTeamId, setLoadingTeamId] = useState<string>('')
   const [keyword, setKeyword] = useState<string>('')
+  const [selectedPlan, setSelectedPlan] = useState<string>('all')
 
   // Effect
   useEffect(() => {
+    console.log(searchParams.get('plan'))
+    console.log(Object.values(Team_Plan))
+    console.log(
+      Object.values(Team_Plan).includes(searchParams.get('plan') as Team_Plan)
+    )
+
     setTeamsListParams({
       ...teamsListParams,
       page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
@@ -47,10 +62,16 @@ function TeamsList() {
         searchParams.get('plan') &&
         Object.values(Team_Plan).includes(searchParams.get('plan') as Team_Plan)
           ? (searchParams.get('plan') as Team_Plan)
-          : '',
+          : 'all',
     })
 
     setKeyword(searchParams.get('q') || '')
+    setSelectedPlan(
+      searchParams.get('plan') &&
+        Object.values(Team_Plan).includes(searchParams.get('plan') as Team_Plan)
+        ? (searchParams.get('plan') as Team_Plan)
+        : 'all'
+    )
   }, [searchParams])
 
   // Table columns
@@ -189,7 +210,7 @@ function TeamsList() {
    * @param size
    */
   const onHandleChangePagination = (page: number, size: number) => {
-    router.push(`/teams?page=${page}`)
+    router.push(`/teams?page=${page}&q=${keyword}&plan=${selectedPlan}`)
   }
 
   /**
@@ -199,22 +220,50 @@ function TeamsList() {
   const onHandleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    router.push(`/teams?page=1&q=${keyword}`)
+    router.push(`/teams?page=1&q=${keyword}&plan=${selectedPlan}`)
   }
 
   return (
     <div className="space-y-4">
       {/* 검색 필터: 시작 */}
-      <form onSubmit={onHandleSearch} className="relative">
-        <Input
-          value={keyword}
-          placeholder="검색어를 입력하세요"
-          onChange={(e) => setKeyword(e.target.value)}
-          className="pr-10"
-        />
-        <Button type="submit" size={'icon'} className="absolute top-0 right-0">
-          <Search size={20} />
-        </Button>
+      <form onSubmit={onHandleSearch} className="grid grid-cols-12 gap-4">
+        <div className="col-span-2">
+          <Select
+            value={selectedPlan}
+            onValueChange={(val) => {
+              console.log(val)
+              // setSelectedPlan(val)
+              if (val) router.push(`/teams?page=1&q=${keyword}&plan=${val}`)
+            }}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Team Plan 선택" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="all">All</SelectItem>
+                {Object.keys(Team_Plan).map((key) => (
+                  <SelectItem key={key} value={key}>
+                    {key}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="relative col-span-10">
+          <Input
+            value={keyword}
+            placeholder="검색어를 입력하세요"
+            onChange={(e) => setKeyword(e.target.value)}
+            className="pr-10"
+          />
+          <Button
+            type="submit"
+            size={'icon'}
+            className="absolute top-0 right-0">
+            <Search size={20} />
+          </Button>
+        </div>
       </form>
       {/* 검색 필터: 끝 */}
       {/* Table: 시작 */}
@@ -228,14 +277,16 @@ function TeamsList() {
       {/* Table: 끝 */}
       {/* Pagination: 시작 */}
       <div className="flex justify-between items-center py-6">
-        <div className="text-sm">Total: {teamsList?.pagination.total}</div>
+        <div className="text-sm">
+          Total: {teamsList?.pagination?.total.toLocaleString()}
+        </div>
         <div className="flex justify-center">
           <Pagination
             defaultCurrent={1}
             showQuickJumper
             showSizeChanger={false}
-            current={teamsList?.pagination.page}
-            total={teamsList?.pagination.total}
+            current={teamsList?.pagination?.page}
+            total={teamsList?.pagination?.total}
             pageSize={SITE_LIST_SIZE}
             onChange={onHandleChangePagination}
           />

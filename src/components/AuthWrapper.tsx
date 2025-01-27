@@ -25,7 +25,7 @@ export const AuthWrapper = ({
   return (
     <div>
       {children}
-      <ProgressBar color="#6A50A6" />
+      <ProgressBar />
     </div>
   )
 }
