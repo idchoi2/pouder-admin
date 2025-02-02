@@ -47,14 +47,8 @@ export async function GET(request: NextRequest) {
       description: true,
       url: true,
       bookmark_field: true,
-      body_contents: true,
-      tags: true,
       keywords: true,
       created_at: true,
-      updated_at: true,
-      _count: {
-        select: { bookmark_chunks: true },
-      },
     },
     orderBy: [
       {
@@ -67,7 +61,6 @@ export async function GET(request: NextRequest) {
   const promises = bookmarks.map(async (bookmark) => {
     console.log(bookmark.url)
     const keywords = bookmark.keywords || []
-    const bodyContents = bookmark.body_contents
 
     // Remove previous chunks
     await prisma.bookmark_chunks.deleteMany({
@@ -80,7 +73,11 @@ export async function GET(request: NextRequest) {
     const bodyChunks: BookmarkChunksContentsInterface[] = [
       {
         type: 'META',
-        content: `${bookmark.title} : ${bookmark.description}`,
+        content: `${bookmark.title}`,
+      },
+      {
+        type: 'META',
+        content: `${bookmark.description}`,
       },
       {
         type: 'META' as Bookmark_Chunk_Type,
