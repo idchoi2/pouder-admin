@@ -37,6 +37,8 @@ export async function GET(request: NextRequest) {
           deleted_at: null,
         },
       },
+      updated_at: null,
+      is_chunk_saved: true,
     },
     select: {
       id: true,
@@ -94,6 +96,14 @@ export async function GET(request: NextRequest) {
       })),
     ]
 
+    // Update bookmark
+    await prisma.bookmarks.update({
+      where: { id: bookmark.id },
+      data: {
+        updated_at: new Date(),
+      },
+    })
+
     // Generate embddings
     const embeddingsCommand = AI_COMMAND_OPTIONS.find(
       (p) => p.command === 'embeddings_body_chunks'
@@ -118,14 +128,6 @@ export async function GET(request: NextRequest) {
         }))
       )
     }
-
-    // Update bookmark
-    await prisma.bookmarks.update({
-      where: { id: bookmark.id },
-      data: {
-        updated_at: new Date(),
-      },
-    })
   })
 
   await Promise.all(promises)

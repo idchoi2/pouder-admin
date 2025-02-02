@@ -527,6 +527,7 @@ model bookmarks {
   application_type Application_Type? @default(WEB)
   summary          String?
   keywords         String[]
+  is_chunk_saved   Boolean?          @default(true)
   bookmark_chunks  bookmark_chunks[]
   accounts         accounts?         @relation(fields: [account_id], references: [id], onUpdate: NoAction)
   bookmark_fields  bookmark_fields?  @relation(fields: [bookmark_field], references: [label], onUpdate: NoAction)
