@@ -76,10 +76,6 @@ export async function GET(request: NextRequest) {
         content: `${bookmark.title}`,
       },
       {
-        type: 'META',
-        content: `${bookmark.description}`,
-      },
-      {
         type: 'META' as Bookmark_Chunk_Type,
         content: bookmark.url || '',
       },
