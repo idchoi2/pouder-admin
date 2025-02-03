@@ -46,7 +46,6 @@ export async function GET(request: NextRequest) {
       id: true,
       team_id: true,
       title: true,
-      description: true,
       url: true,
       bookmark_field: true,
       keywords: true,
@@ -54,7 +53,7 @@ export async function GET(request: NextRequest) {
     },
     orderBy: [
       {
-        created_at: 'asc',
+        created_at: 'desc',
       },
     ],
     take: BOOKMARK_CRON_SIZE,
