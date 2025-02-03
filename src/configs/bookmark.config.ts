@@ -8,4 +8,4 @@ export const MAX_BOOKMARK_SIZE = 200
 
 export const TIMEOUT_URL_PARSER = 30000
 
-export const BOOKMARK_CRON_SIZE = 2
+export const BOOKMARK_CRON_SIZE = 1
