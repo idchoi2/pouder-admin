@@ -7,6 +7,8 @@ import { Bookmark_Chunk_Type } from '@prisma/client'
 import { embedMany } from 'ai'
 import { NextRequest, NextResponse } from 'next/server'
 
+export const maxDuration = 300
+
 /**
  * Update bookmarks with no chunks
  * @returns
