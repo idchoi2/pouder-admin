@@ -24,6 +24,7 @@ import { FormEvent, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
+import { Switch } from '../ui/switch'
 import { useToast } from '../ui/use-toast'
 
 function TeamsList() {
@@ -140,6 +141,16 @@ function TeamsList() {
       key: 'bookmarkCount',
       render: (team: TeamsInterface) => (
         <Badge>{team.count_bookmarks.toLocaleString()}</Badge>
+      ),
+      width: 100,
+    },
+    {
+      title: '공개여부',
+      key: 'is_protected',
+      render: (team: TeamsInterface) => (
+        <div className="flex items-center space-x-2">
+          <Switch checked={!team.is_protected} />
+        </div>
       ),
       width: 100,
     },

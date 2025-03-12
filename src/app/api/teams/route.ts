@@ -70,6 +70,7 @@ export async function GET(request: NextRequest) {
         },
       },
       count_bookmarks: true,
+      is_protected: true,
     },
     orderBy: [
       {
