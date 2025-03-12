@@ -1,6 +1,5 @@
 import GoogleLogin from '@/components/Auth/GoogleLogin'
-import Logo from '@/components/ui/logo'
-import Typography from '@/components/ui/typography'
+import LogoText from '@/components/ui/logo-text'
 
 export default async function LoginPage() {
   return (
@@ -9,12 +8,7 @@ export default async function LoginPage() {
         <div className="space-y-2">
           <div className="space-x-4 flex items-center justify-center">
             <div className="flex justify-center">
-              <Logo className="w-8 h-8" />
-            </div>
-            <div className="flex justify-center">
-              <Typography variant="h2" className="!font-extrabold">
-                Pouder
-              </Typography>
+              <LogoText className="w-40 h-20" />
             </div>
           </div>
         </div>
