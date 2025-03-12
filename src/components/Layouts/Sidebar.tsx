@@ -1,7 +1,6 @@
 'use client'
 
-import Logo from '@/components/ui/logo'
-import Typography from '@/components/ui/typography'
+import LogoText from '@/components/ui/logo-text'
 import { meAtom } from '@/states'
 import { useRecoilState } from 'recoil'
 import SignOut from '../Auth/SignOut'
@@ -17,14 +16,7 @@ function Sidebar() {
     <div className="sticky top-0 left-0 w-56 flex-none h-screen bg-background flex flex-col justify-between p-4 border-r">
       <div className="space-y-4">
         <div className="space-x-2 flex items-center">
-          <div className="flex justify-center">
-            <Logo className="w-4 h-4" />
-          </div>
-          <div className="flex justify-center">
-            <Typography variant="h6" className="!font-extrabold">
-              Pouder
-            </Typography>
-          </div>
+          <LogoText className="w-16 h-6" />
         </div>
         <SidebarMenus />
         <hr />

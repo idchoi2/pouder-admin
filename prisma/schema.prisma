@@ -342,6 +342,7 @@ model buckets {
   allowed_mime_types         String[]
   owner_id                   String?
   objects                    objects[]
+  prefixes                   prefixes[]
   s3_multipart_uploads       s3_multipart_uploads[]
   s3_multipart_uploads_parts s3_multipart_uploads_parts[]
 
@@ -360,6 +361,7 @@ model migrations {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model objects {
   id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   bucket_id        String?
@@ -373,9 +375,11 @@ model objects {
   version          String?
   owner_id         String?
   user_metadata    Json?
+  level            Int?
   buckets          buckets?  @relation(fields: [bucket_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "objects_bucketId_fkey")
 
   @@unique([bucket_id, name], map: "bucketid_objname")
+  @@unique([name, bucket_id], map: "idx_name_bucket_unique")
   @@index([bucket_id, name], map: "idx_objects_bucket_id_name")
   @@index([name], map: "name_prefix_search")
   @@schema("storage")
@@ -419,30 +423,31 @@ model s3_multipart_uploads_parts {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model accounts {
-  id                                                  BigInt               @id @default(autoincrement())
-  created_at                                          DateTime             @default(now()) @db.Timestamptz(6)
-  user_id                                             String?              @db.Uuid
+  id                                                  BigInt                    @id @default(autoincrement())
+  created_at                                          DateTime                  @default(now()) @db.Timestamptz(6)
+  user_id                                             String?                   @db.Uuid
   bio                                                 String?
   location                                            String?
-  survey                                              Json?                @db.Json
-  preferred_language                                  Supported_Language?  @default(ENGLISH)
+  survey                                              Json?                     @db.Json
+  preferred_language                                  Supported_Language?       @default(ENGLISH)
   avatar                                              String?
-  deleted_at                                          DateTime?            @db.Timestamptz(6)
+  deleted_at                                          DateTime?                 @db.Timestamptz(6)
   name                                                String
   is_email_newsLetter                                 Boolean?
-  is_admin                                            Boolean              @default(false)
-  is_approved                                         Boolean?             @default(false)
-  is_sent                                             Boolean?             @default(false)
+  is_admin                                            Boolean                   @default(false)
+  is_approved                                         Boolean?                  @default(false)
+  is_sent                                             Boolean?                  @default(false)
   contact_id                                          String?
-  users                                               users?               @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users                                               users?                    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   bookmarks                                           bookmarks[]
   chat_conversations                                  chat_conversations[]
   chats                                               chats[]
   feedbacks                                           feedbacks[]
   folders                                             folders[]
   team_account_roles                                  team_account_roles[]
-  team_invites_team_invites_account_idToaccounts      team_invites[]       @relation("team_invites_account_idToaccounts")
-  team_invites_team_invites_host_account_idToaccounts team_invites[]       @relation("team_invites_host_account_idToaccounts")
+  team_account_subscribes                             team_account_subscribes[]
+  team_invites_team_invites_account_idToaccounts      team_invites[]            @relation("team_invites_account_idToaccounts")
+  team_invites_team_invites_host_account_idToaccounts team_invites[]            @relation("team_invites_host_account_idToaccounts")
   teams                                               teams[]
   token_usages                                        token_usages[]
 
@@ -451,31 +456,36 @@ model accounts {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model teams {
-  id                   String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  created_at           DateTime               @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime?              @db.Timestamptz(6)
-  deleted_at           DateTime?              @db.Timestamptz(6)
-  name                 String
-  description          String?
-  icon                 String?
-  plan                 Team_Plan              @default(FREE)
-  account_id           BigInt?
-  count_bookmarks      Int                    @default(0)
-  bookmark_chunks      bookmark_chunks[]
-  bookmarks            bookmarks[]
-  chat_conversations   chat_conversations[]
-  chats                chats[]
-  feedbacks            feedbacks[]
-  folders              folders[]
-  team_account_roles   team_account_roles[]
-  team_bookmark_fields team_bookmark_fields[]
-  team_invites         team_invites[]
-  team_tags            team_tags[]
-  team_usages_daily    team_usages_daily[]
-  team_website_fields  team_website_fields[]
-  team_website_types   team_website_types[]
-  accounts             accounts?              @relation(fields: [account_id], references: [id], onUpdate: NoAction)
-  token_usages         token_usages[]
+  id                      String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at              DateTime                  @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime?                 @db.Timestamptz(6)
+  deleted_at              DateTime?                 @db.Timestamptz(6)
+  name                    String
+  description             String?
+  icon                    String?
+  plan                    Team_Plan                 @default(FREE)
+  account_id              BigInt?
+  count_bookmarks         Int                       @default(0)
+  count_subscribers       Int?                      @default(0)
+  is_protected            Boolean?                  @default(true)
+  social_links            Json?                     @db.Json
+  website                 String?
+  bookmark_chunks         bookmark_chunks[]
+  bookmarks               bookmarks[]
+  chat_conversations      chat_conversations[]
+  chats                   chats[]
+  feedbacks               feedbacks[]
+  folders                 folders[]
+  team_account_roles      team_account_roles[]
+  team_account_subscribes team_account_subscribes[]
+  team_bookmark_fields    team_bookmark_fields[]
+  team_invites            team_invites[]
+  team_tags               team_tags[]
+  team_usages_daily       team_usages_daily[]
+  team_website_fields     team_website_fields[]
+  team_website_types      team_website_types[]
+  accounts                accounts?                 @relation(fields: [account_id], references: [id], onUpdate: NoAction)
+  token_usages            token_usages[]
 
   @@schema("public")
 }
@@ -483,12 +493,12 @@ model teams {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model bookmark_chunks {
   id          BigInt                 @id @default(autoincrement())
+  created_at  DateTime?              @default(now()) @db.Timestamptz(6)
   bookmark_id String?                @db.Uuid
   content     String?
+  embedding   Unsupported("vector")?
   team_id     String?                @db.Uuid
   chunk_type  Bookmark_Chunk_Type?
-  embedding   Unsupported("vector")?
-  created_at  DateTime?              @default(now()) @db.Timestamptz(6)
   deleted_at  DateTime?              @db.Timestamptz(6)
   bookmarks   bookmarks?             @relation(fields: [bookmark_id], references: [id], onUpdate: NoAction)
   teams       teams?                 @relation(fields: [team_id], references: [id], onUpdate: NoAction)
@@ -598,8 +608,8 @@ model chats {
   search_conditions    Json?               @db.Json
   account_id           BigInt?
   answer               String?
-  sources              String[]
   chat_conversation_id String?             @db.Uuid
+  sources              String[]
   chat_bookmarks       chat_bookmarks[]
   accounts             accounts?           @relation(fields: [account_id], references: [id], onUpdate: NoAction)
   chat_conversations   chat_conversations? @relation(fields: [chat_conversation_id], references: [id], onUpdate: NoAction)
@@ -786,6 +796,32 @@ model team_usages_daily {
   teams           teams?   @relation(fields: [team_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model team_account_subscribes {
+  id         BigInt    @id @default(autoincrement())
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  team_id    String?   @db.Uuid
+  account_id BigInt?
+  accounts   accounts? @relation(fields: [account_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  teams      teams?    @relation(fields: [team_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
+model prefixes {
+  bucket_id  String
+  name       String
+  level      Int       @default(dbgenerated("storage.get_level(name)"))
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at DateTime? @default(now()) @db.Timestamptz(6)
+  buckets    buckets   @relation(fields: [bucket_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "prefixes_bucketId_fkey")
+
+  @@id([bucket_id, level, name])
+  @@schema("storage")
 }
 
 enum aal_level {

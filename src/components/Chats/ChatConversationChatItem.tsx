@@ -1,10 +1,10 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import Logo from '@/components/ui/logo'
 import { BookmarksInterface, ChatsInterface } from '@/types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import LogoText from '../ui/logo-text'
 
 const delayCopied = 3000
 let timerCopiedPrompt: any = null
@@ -149,8 +149,7 @@ function ChatConversationChatItem({ chat }: { chat: ChatsInterface }) {
       <div className={'flex'}>
         <div className="space-y-0.5">
           <div className="flex items-center space-x-1">
-            <Logo className="w-4 h-4" />
-            <span className="text-sm font-bold">Pouder</span>
+            <LogoText className="w-16 h-6" />
           </div>
           <div className="py-2 text-sm">
             {chat.answer && (
