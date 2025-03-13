@@ -45,15 +45,10 @@ function TeamsList() {
   const [loadingTeamId, setLoadingTeamId] = useState<string>('')
   const [keyword, setKeyword] = useState<string>('')
   const [selectedPlan, setSelectedPlan] = useState<string>('all')
+  const [isProtected, setIsProtected] = useState<string>('all')
 
   // Effect
   useEffect(() => {
-    console.log(searchParams.get('plan'))
-    console.log(Object.values(Team_Plan))
-    console.log(
-      Object.values(Team_Plan).includes(searchParams.get('plan') as Team_Plan)
-    )
-
     setTeamsListParams({
       ...teamsListParams,
       page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
@@ -64,6 +59,7 @@ function TeamsList() {
         Object.values(Team_Plan).includes(searchParams.get('plan') as Team_Plan)
           ? (searchParams.get('plan') as Team_Plan)
           : 'all',
+      is_protected: searchParams.get('is_protected') || 'all',
     })
 
     setKeyword(searchParams.get('q') || '')
@@ -73,6 +69,7 @@ function TeamsList() {
         ? (searchParams.get('plan') as Team_Plan)
         : 'all'
     )
+    setIsProtected(searchParams.get('is_protected') || 'all')
   }, [searchParams])
 
   // Table columns
@@ -140,7 +137,19 @@ function TeamsList() {
       title: '북마크 수',
       key: 'bookmarkCount',
       render: (team: TeamsInterface) => (
-        <Badge>{team.count_bookmarks.toLocaleString()}</Badge>
+        <Badge>
+          {team.count_bookmarks ? team.count_bookmarks.toLocaleString() : 0}
+        </Badge>
+      ),
+      width: 100,
+    },
+    {
+      title: '구독자 수',
+      key: 'bookmarkCount',
+      render: (team: TeamsInterface) => (
+        <Badge>
+          {team.count_subscribers ? team.count_subscribers.toLocaleString() : 0}
+        </Badge>
       ),
       width: 100,
     },
@@ -242,16 +251,17 @@ function TeamsList() {
           <Select
             value={selectedPlan}
             onValueChange={(val) => {
-              console.log(val)
-              // setSelectedPlan(val)
-              if (val) router.push(`/teams?page=1&q=${keyword}&plan=${val}`)
+              if (val)
+                router.push(
+                  `/teams?page=1&q=${keyword}&plan=${val}&is_protected=${isProtected}`
+                )
             }}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Team Plan 선택" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="all">모든 Plan</SelectItem>
                 {Object.keys(Team_Plan).map((key) => (
                   <SelectItem key={key} value={key}>
                     {key}
@@ -261,7 +271,28 @@ function TeamsList() {
             </SelectContent>
           </Select>
         </div>
-        <div className="relative col-span-10">
+        <div className="col-span-2">
+          <Select
+            value={isProtected}
+            onValueChange={(val) => {
+              if (val)
+                router.push(
+                  `/teams?page=1&q=${keyword}&plan=${selectedPlan}&is_protected=${val}`
+                )
+            }}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="공개여부 선택" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="all">모든 공개 여부</SelectItem>
+                <SelectItem value="true">비공개</SelectItem>
+                <SelectItem value="false">공개</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="relative col-span-8">
           <Input
             value={keyword}
             placeholder="검색어를 입력하세요"

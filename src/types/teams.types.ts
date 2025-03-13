@@ -7,6 +7,7 @@ export interface TeamsListSearchParamsInterface {
   sort: string
   q: string
   plan: Team_Plan | 'all'
+  is_protected: string
 }
 
 export interface TeamsListSearchInterface {
