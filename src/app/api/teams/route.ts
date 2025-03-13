@@ -29,6 +29,10 @@ export async function GET(request: NextRequest) {
     Object.values(Team_Plan).includes(searchParams.get('plan') as Team_Plan)
       ? (searchParams.get('plan') as Team_Plan)
       : null
+  const isFilterProtected =
+    searchParams.get('is_protected') &&
+    searchParams.get('is_protected') !== 'all'
+  const isProtected = searchParams.get('is_protected') === 'true'
 
   const teams = await prisma.teams.findMany({
     where: {
@@ -46,6 +50,11 @@ export async function GET(request: NextRequest) {
         plan
           ? {
               plan,
+            }
+          : {},
+        isFilterProtected
+          ? {
+              is_protected: isProtected,
             }
           : {},
       ],
@@ -70,6 +79,7 @@ export async function GET(request: NextRequest) {
         },
       },
       count_bookmarks: true,
+      count_subscribers: true,
       is_protected: true,
     },
     orderBy: [
@@ -97,6 +107,11 @@ export async function GET(request: NextRequest) {
         plan
           ? {
               plan,
+            }
+          : {},
+        isFilterProtected
+          ? {
+              is_protected: isProtected,
             }
           : {},
       ],

@@ -60,7 +60,6 @@ export async function GET(request: NextRequest) {
   })
 
   const promises = bookmarks.map(async (bookmark) => {
-    console.log(bookmark.url)
     const keywords = bookmark.keywords || []
 
     // Remove previous chunks
