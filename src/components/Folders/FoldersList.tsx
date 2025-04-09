@@ -64,7 +64,6 @@ function FoldersList() {
             </Avatar>
             <span>{folder.name}</span>
           </div>
-
           <Button
             variant="link"
             size="sm"

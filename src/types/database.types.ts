@@ -37,6 +37,7 @@ export interface TeamsInterface extends teams {
   _count?: {
     bookmarks: number
   }
+  folders?: FoldersInterface[]
 }
 
 export interface UserInterface extends accounts {

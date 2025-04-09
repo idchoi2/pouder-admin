@@ -80,6 +80,12 @@ export async function GET(request: NextRequest) {
       },
       count_bookmarks: true,
       count_subscribers: true,
+      folders: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
       is_protected: true,
     },
     orderBy: [

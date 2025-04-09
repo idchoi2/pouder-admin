@@ -17,7 +17,7 @@ import { teamsListParamsAtom } from '@/states'
 import { TeamsInterface } from '@/types/database.types'
 import { Team_Plan } from '@prisma/client'
 import { Pagination, Table } from 'antd'
-import { Search } from 'lucide-react'
+import { Search, SquareArrowOutUpRight } from 'lucide-react'
 import moment from 'moment'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { FormEvent, useEffect, useState } from 'react'
@@ -75,20 +75,21 @@ function TeamsList() {
   // Table columns
   const tableCols = [
     {
-      title: 'ID',
-      key: 'id',
-      render: (team: TeamsInterface) => (
-        <Badge variant={'outline'} className="text-xs">
-          {team.id}
-        </Badge>
-      ),
-      width: 80,
-    },
-    {
       title: '팀이름',
       key: 'name',
       render: (team: TeamsInterface) => (
-        <div className="flex items-center space-x-2">{team.name}</div>
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2">{team.name}</div>
+          <Button
+            variant="link"
+            size="sm"
+            onClick={() =>
+              window.open(`https://pouder.site/teams/${team.id}`, '_blank')
+            }>
+            <SquareArrowOutUpRight size={14} className="mr-1" />
+            상세보기
+          </Button>
+        </div>
       ),
       width: 200,
     },
@@ -140,6 +141,40 @@ function TeamsList() {
         <Badge>
           {team.count_bookmarks ? team.count_bookmarks.toLocaleString() : 0}
         </Badge>
+      ),
+      width: 100,
+    },
+    {
+      title: '폴더',
+      key: 'folders',
+      render: (team: TeamsInterface) => (
+        <div className="space-y-2">
+          <div>
+            <Badge>
+              {team.folders ? team.folders.length.toLocaleString() : 0}
+            </Badge>
+          </div>
+          <ul className="space-y-2 overflow-y-auto max-h-40">
+            {team.folders?.map((folder) => (
+              <li key={folder.id}>
+                <div className="flex items-center space-x-2">
+                  <Badge variant={'outline'}>
+                    <Avatar className="w-4 h-4 aspect-square cursor-pointer mr-1">
+                      <AvatarImage
+                        src={folder.icon || ''}
+                        alt={folder.name || ''}
+                      />
+                      <AvatarFallback className="invert">
+                        {folder.name ? folder.name[0] : ''}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span>{folder.name}</span>
+                  </Badge>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       ),
       width: 100,
     },
