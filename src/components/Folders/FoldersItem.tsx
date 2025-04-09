@@ -19,7 +19,7 @@ import { useParams } from 'next/navigation'
 import { MouseEvent } from 'react'
 import { Button } from '../ui/button'
 
-export default function BookmarkItem({
+export default function FoldersItem({
   bookmark,
   bookmarksListParams,
   disabled,

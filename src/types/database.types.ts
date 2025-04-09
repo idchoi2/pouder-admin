@@ -8,6 +8,7 @@ import {
   chat_conversations,
   chats,
   feedbacks,
+  folders,
   team_account_roles,
   teams,
   users,
@@ -52,6 +53,19 @@ export interface BookmarksInterface extends bookmarks {
   _count?: {
     bookmark_chunks: number
   }
+  folder_bookmarks?: {
+    id: string
+    folders: folders
+  }[]
+}
+
+export interface FoldersInterface extends folders {
+  teams?: teams
+  accounts?: AccountInterface
+  folder_bookmarks?: {
+    id: string
+    bookmarks: BookmarksInterface
+  }[]
 }
 
 export interface ChatBookmarksInterface extends chat_bookmarks {

@@ -1,12 +1,12 @@
 import prisma from '@/app/prisma'
-import { BOOKMARK_LIST_SIZE } from '@/configs'
+import { FOLDER_LIST_SIZE } from '@/configs'
 import { showErrorJsonResponse } from '@/lib/utils'
 import { getMe } from '@/utils/auth'
 import { checkAccount } from '@/utils/validation'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
- * Read list of bookmarks
+ * Read list of folders
  * @returns
  */
 export async function GET(request: NextRequest) {
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
   const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1
   const keyword = searchParams.get('q') || ''
 
-  const bookmarks = await prisma.bookmarks.findMany({
+  const folders = await prisma.folders.findMany({
     where: {
       deleted_at: null,
       accounts: {
@@ -32,61 +32,36 @@ export async function GET(request: NextRequest) {
       },
       OR: [
         {
-          url: {
+          name: {
             contains: keyword,
             mode: 'insensitive',
           },
         },
         {
-          title: {
+          description: {
             contains: keyword,
             mode: 'insensitive',
-          },
-        },
-        {
-          summary: {
-            contains: keyword,
-            mode: 'insensitive',
-          },
-        },
-        {
-          keywords: {
-            hasSome: [keyword],
           },
         },
       ],
     },
-    /* include: {
-      teams: true,
-      bookmark_fields: true,
-      accounts: true,
-    }, */
     select: {
       id: true,
-      title: true,
-      url: true,
-      teams: true,
-      bookmark_field: true,
-      bookmark_fields: true,
-      accounts: true,
-      summary: true,
-      keywords: true,
-      tags: true,
+      name: true,
+      description: true,
+      icon: true,
       created_at: true,
-      favicon: true,
-      application_type: true,
-      body_contents: true,
-      _count: {
-        select: { bookmark_chunks: true },
-      },
+      accounts: true,
+      teams: true,
       folder_bookmarks: {
         select: {
           id: true,
-          folders: {
+          bookmarks: {
             select: {
               id: true,
-              name: true,
-              icon: true,
+              title: true,
+              url: true,
+              favicon: true,
             },
           },
         },
@@ -97,11 +72,11 @@ export async function GET(request: NextRequest) {
         created_at: 'desc',
       },
     ],
-    skip: (page - 1) * BOOKMARK_LIST_SIZE,
-    take: BOOKMARK_LIST_SIZE,
+    skip: (page - 1) * FOLDER_LIST_SIZE,
+    take: FOLDER_LIST_SIZE,
   })
 
-  const allBookmarksCount = await prisma.bookmarks.count({
+  const allFoldersCount = await prisma.folders.count({
     where: {
       deleted_at: null,
       accounts: {
@@ -109,26 +84,15 @@ export async function GET(request: NextRequest) {
       },
       OR: [
         {
-          url: {
+          name: {
             contains: keyword,
             mode: 'insensitive',
           },
         },
         {
-          title: {
+          description: {
             contains: keyword,
             mode: 'insensitive',
-          },
-        },
-        {
-          summary: {
-            contains: keyword,
-            mode: 'insensitive',
-          },
-        },
-        {
-          keywords: {
-            hasSome: [keyword],
           },
         },
       ],
@@ -137,13 +101,13 @@ export async function GET(request: NextRequest) {
 
   const pagination = {
     page,
-    size: BOOKMARK_LIST_SIZE,
-    total: allBookmarksCount,
-    totalPages: Math.ceil(allBookmarksCount / BOOKMARK_LIST_SIZE),
+    size: FOLDER_LIST_SIZE,
+    total: allFoldersCount,
+    totalPages: Math.ceil(allFoldersCount / FOLDER_LIST_SIZE),
   }
 
   return NextResponse.json({
-    list: bookmarks,
+    list: folders,
     pagination,
   })
 }

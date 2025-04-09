@@ -2,6 +2,7 @@
 
 import {
   Bookmark,
+  Folder,
   Home,
   MessageSquare,
   Search,
@@ -38,6 +39,18 @@ function SidebarMenus() {
           <Link href="/bookmarks" className="flex items-center space-x-2">
             <Bookmark size={16} />
             <span>Bookmarks</span>
+          </Link>
+        </Button>
+      </li>
+      <li>
+        <Button
+          variant={pathname.startsWith('/folders') ? 'default' : 'ghost'}
+          size={'sm'}
+          asChild
+          className="w-full block justify-start">
+          <Link href="/folders" className="flex items-center space-x-2">
+            <Folder size={16} />
+            <span>Folders</span>
           </Link>
         </Button>
       </li>
