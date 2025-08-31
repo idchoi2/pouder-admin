@@ -1,7 +1,7 @@
+import { BOOKMARK_FIELDS } from '@/configs'
 import { showErrorJsonResponse } from '@/lib/utils'
 import { getMe } from '@/utils/auth'
 import { checkAccount } from '@/utils/validation'
-import { get } from '@vercel/edge-config'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     return showErrorJsonResponse('unauthorized')
   }
 
-  const bookmark_fields = await get('bookmark_fields')
+  const bookmark_fields = await BOOKMARK_FIELDS
 
   return NextResponse.json(bookmark_fields)
 }
